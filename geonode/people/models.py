@@ -57,6 +57,7 @@ class Profile(models.Model):
     country = models.CharField(choices=COUNTRIES, max_length=3, blank=True, null=True, help_text=_('country of the physical address'))
     email = models.EmailField(blank=True, null=True, help_text=_('address of the electronic mailbox of the responsible organization or individual'))
     keywords = TaggableManager(_('keywords'), blank=True, help_text=_('commonly used word(s) or formalised word(s) or phrase(s) used to describe the subject (space or comma-separated'))
+    aoi = models.CharField(_('Area of Interest'), max_length=255, blank=True, null=True, help_text=_('Area of Interest as Bounding Box (MinX,MinY,MaxX,MaxY)'))
 
     def clean(self):
         # the specification says that either name or organization should be provided

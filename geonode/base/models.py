@@ -414,6 +414,9 @@ class LinkManager(models.Manager):
     def download(self):
         return self.get_query_set().filter(link_type__in=['image', 'data'])
 
+    def aoi(self):
+	return self.get_query_set().filter(link_type__in=['data'])
+
     def metadata(self):
         return self.get_query_set().filter(link_type='metadata')
 
