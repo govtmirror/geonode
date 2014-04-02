@@ -34,6 +34,8 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 DEBUG = TEMPLATE_DEBUG = True
 
 # Set to True to load non-minified versions of (static) client dependencies
+# Requires to set-up Node and tools that are required for static development 
+# otherwise it will raise errors for the missing non-minified dependencies
 DEBUG_STATIC = False
 
 # This is needed for integration tests, they require
@@ -77,7 +79,7 @@ LANGUAGES = (
     ('el', 'Ελληνικά'),
     ('id', 'Bahasa Indonesia'),
     ('zh-cn', '中文'),
-    ('ja', '日本人'),
+    ('ja', '日本語'),
     ('fa', 'Persian'),
     ('pt', 'Portuguese'),
     ('ru', 'Russian'),
@@ -594,5 +596,18 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
+# Available download formats
+DOWNLOAD_FORMATS_METADATA = [
+    'Atom', 'DIF', 'Dublin Core', 'ebRIM', 'FGDC', 'TC211',
+]
+DOWNLOAD_FORMATS_VECTOR = [
+    'JPEG', 'PDF', 'PNG', 'Zipped Shapefile', 'GML 2.0', 'GML 3.1.1', 'CSV', 
+    'Excel', 'GeoJSON', 'KML', 'View in Google Earth', 'Tiles',
+]
+DOWNLOAD_FORMATS_RASTER = [
+    'JPEG', 'PDF', 'PNG', 'ArcGrid', 'GeoTIFF', 'Gtopo30', 'ImageMosaic', 'KML',
+    'View in Google Earth', 'Tiles',
+]
 
 
