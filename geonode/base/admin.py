@@ -2,7 +2,11 @@ from django.contrib import admin
 from django.conf import settings
 
 from geonode.base.models import (TopicCategory, SpatialRepresentationType,
-    Region, RestrictionCodeType, ContactRole, ResourceBase, Link, License, Thumbnail)
+    Region, RestrictionCodeType, ContactRole, ResourceBase, Link, Classification, License, Thumbnail)
+
+class ClassificationAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    list_display = ('name',)
 
 class LicenseAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
@@ -109,3 +113,4 @@ admin.site.register(ResourceBase, ResourceBaseAdmin)
 admin.site.register(Link, LinkAdmin)
 admin.site.register(Thumbnail, ThumbnailAdmin)
 admin.site.register(License, LicenseAdmin)
+admin.site.register(Classification, ClassificationAdmin)

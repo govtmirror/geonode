@@ -212,6 +212,21 @@ class ResourceBaseManager(models.Manager):
         return contact
 
 
+
+class Classification(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(null=True, blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+class Distribution_Restrictions(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(null=True, blank=True)
+
+    def __unicode__(self):
+        return self.name
+
 class License(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
@@ -256,6 +271,8 @@ class ResourceBase(models.Model, PermissionLevelMixin, ThumbnailMixin):
     restriction_code_type = models.ForeignKey(RestrictionCodeType, verbose_name=_('restrictions'), help_text=_('limitation(s) placed upon the access or use of the data.'), null=True, blank=True, limit_choices_to=Q(is_choice=True))
     constraints_other = models.TextField(_('restrictions other'), blank=True, null=True, help_text=_('other restrictions and legal prerequisites for accessing and using the resource or metadata'))
 
+    classification = models.ForeignKey(Classification, null=True, blank=True)
+    distribution_restrictions = models.ForeignKey(Distribution_Restrictions, null=True, blank=True)
     license = models.ForeignKey(License, null=True, blank=True)
 
     # Section 4
