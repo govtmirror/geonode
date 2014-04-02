@@ -220,7 +220,7 @@ class Classification(models.Model):
     def __unicode__(self):
         return self.name
 
-class Distribution_Restrictions(models.Model):
+class DistributionRestriction(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
 
@@ -272,7 +272,7 @@ class ResourceBase(models.Model, PermissionLevelMixin, ThumbnailMixin):
     constraints_other = models.TextField(_('restrictions other'), blank=True, null=True, help_text=_('other restrictions and legal prerequisites for accessing and using the resource or metadata'))
 
     classification = models.ForeignKey(Classification, null=True, blank=True)
-    distribution_restrictions = models.ForeignKey(Distribution_Restrictions, null=True, blank=True)
+    distribution_restriction = models.ForeignKey(DistributionRestriction, null=True, blank=True)
     license = models.ForeignKey(License, null=True, blank=True)
 
     # Section 4
