@@ -6,6 +6,7 @@ $(function(){
         */
         var params = {
             types: [],
+            classifications: [],
             categories: [],
             keywords: [],
             date_start: [],
@@ -29,6 +30,12 @@ $(function(){
         if(params.date_end[0] === 'yyyy-mm-dd'){
             params.date_end = [''];
         }
+
+        //from the client we don't use the all key for the categories
+        if(params.classifications[0] === 'all'){
+            params.classifications.shift();
+        }
+
         //from the client we don't use the all key for the categories
         if(params.categories[0] === 'all'){
             params.categories.shift();
@@ -38,6 +45,7 @@ $(function(){
 
         var data = {
             'type': params.types.join(','),
+            'classification':params.classifications.join(','),
             'category': params.categories.join(','),
             'kw': params.keywords.join(','),
             'start_date': params.date_start[0],
@@ -91,6 +99,20 @@ $(function(){
             }
         }
 
+        // logic to make sure that clicking on the all classifications it also
+        // activate/deactivate all other classifications
+        if ($(element).parents('ul').attr('id') === 'classifications' && $(element).attr('data-class') === 'all'){
+            if ($(element).hasClass('active')){
+                $('#classifications').find('a').each(function(){
+                    $(this).removeClass('active');
+                });
+                $(element).addClass('active');
+            } 
+        }
+        else if ($(element).parents('ul').attr('id') === 'classifications'){
+            $('a[data-class="all"]').removeClass('active');
+        }
+
         // logic to make sure that clicking on the all categories it also
         // activate/deactivate all other categories
         if ($(element).parents('ul').attr('id') === 'categories' && $(element).attr('data-class') === 'all'){
@@ -99,7 +121,7 @@ $(function(){
                     $(this).removeClass('active');
                 });
                 $(element).addClass('active');
-            } 
+            }
         }
         else if ($(element).parents('ul').attr('id') === 'categories'){
             $('a[data-class="all"]').removeClass('active');

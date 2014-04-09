@@ -234,7 +234,7 @@ class ClassificationCodeType(models.Model):
         return self.name+" ("+self.abbreviation+")"
 
     class Meta:
-        ordering = ("identifier",)
+        ordering = ("level",)
         verbose_name_plural = 'Metadata Classification Code Types'
 
 class DistributionRestriction(models.Model):
@@ -339,7 +339,13 @@ class ResourceBase(models.Model, PermissionLevelMixin, ThumbnailMixin):
 
     def __unicode__(self):
         return self.title
-        
+
+    def title2(self):
+        if settings.CLASSIFICATION and (not self.classification_code_type is none):
+            return "("+self.classification_code_type.abbreviation +") "+self.title
+        else:
+            return self.title
+    
     @property
     def geonode_type(self):
         gn_type = ''
