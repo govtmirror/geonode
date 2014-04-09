@@ -16,17 +16,10 @@
     </li>
   {% endif %}
 
-  {% if resourcebase.classification %}
+  {% if resourcebase.classification_code_type %}
     <li>
       <strong>{% trans "Classification" %}:</strong>
-      {{ resourcebase.classification.name }}
-    </li>
-  {% endif %}
-
-  {% if resourcebase.distribution_restriction %}
-    <li>
-      <strong>{% trans "Distribution Restriction" %}:</strong>
-      {{ resourcebase.distribution_restriction.name }}
+      {{ resourcebase.classification_code_type }}
     </li>
   {% endif %}
 

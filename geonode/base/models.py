@@ -211,14 +211,24 @@ class ResourceBaseManager(models.Manager):
                                                 defaults={"name": "Geonode Admin"})[0]
         return contact
 
-
-
-class Classification(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField(null=True, blank=True)
+class ClassificationCodeType(models.Model):
+    """
+    Metadata information about the spatial representation type.
+    It should reflect a list of codes from TC211
+    See: http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml
+    <CodeListDictionary gml:id="MD_ClassificationCode">
+    """
+    identifier = models.CharField(max_length=255, editable=False)
+    description = models.TextField(max_length=255, editable=False)
+    gn_description = models.TextField('GeoNode description', max_length=255)
+    is_choice = models.BooleanField(default=True)
 
     def __unicode__(self):
-        return self.name
+        return self.gn_description
+
+    class Meta:
+        ordering = ("identifier",)
+        verbose_name_plural = 'Metadata Classification Code Types'
 
 class DistributionRestriction(models.Model):
     name = models.CharField(max_length=100)
@@ -271,8 +281,8 @@ class ResourceBase(models.Model, PermissionLevelMixin, ThumbnailMixin):
     restriction_code_type = models.ForeignKey(RestrictionCodeType, verbose_name=_('restrictions'), help_text=_('limitation(s) placed upon the access or use of the data.'), null=True, blank=True, limit_choices_to=Q(is_choice=True))
     constraints_other = models.TextField(_('restrictions other'), blank=True, null=True, help_text=_('other restrictions and legal prerequisites for accessing and using the resource or metadata'))
 
-    classification = models.ForeignKey(Classification, null=True, blank=True)
-    distribution_restriction = models.ForeignKey(DistributionRestriction, null=True, blank=True)
+    classification_code_type = models.ForeignKey(ClassificationCodeType, verbose_name=_('classification'), help_text=_('limitation(s) placed upon the access or use of the data.'), null=True, blank=True, limit_choices_to=Q(is_choice=True))
+    #distribution_restriction = models.ForeignKey(DistributionRestriction, null=True, blank=True)
     license = models.ForeignKey(License, null=True, blank=True)
 
     # Section 4

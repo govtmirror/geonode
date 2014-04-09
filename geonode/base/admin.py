@@ -2,11 +2,20 @@ from django.contrib import admin
 from django.conf import settings
 
 from geonode.base.models import (TopicCategory, SpatialRepresentationType,
-    Region, RestrictionCodeType, ContactRole, ResourceBase, Link, Classification, DistributionRestriction, License, Thumbnail)
+    Region, RestrictionCodeType, ContactRole, ResourceBase, Link, ClassificationCodeType, DistributionRestriction, License, Thumbnail)
 
-class ClassificationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name')
-    list_display = ('name',)
+class ClassificationCodeTypeAdmin(admin.ModelAdmin):
+    model = RestrictionCodeType
+    list_display_links = ('identifier',)
+    list_display = ('identifier', 'description', 'gn_description', 'is_choice')
+
+    def has_add_permission(self, request):
+        # the records are from the standard TC 211 list, so no way to add
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        # the records are from the standard TC 211 list, so no way to remove
+        return False
 
 class DistributionRestrictionAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
@@ -117,5 +126,5 @@ admin.site.register(ResourceBase, ResourceBaseAdmin)
 admin.site.register(Link, LinkAdmin)
 admin.site.register(Thumbnail, ThumbnailAdmin)
 admin.site.register(License, LicenseAdmin)
-admin.site.register(Classification, ClassificationAdmin)
+admin.site.register(ClassificationCodeType, ClassificationCodeTypeAdmin)
 admin.site.register(DistributionRestriction, DistributionRestrictionAdmin)

@@ -249,7 +249,57 @@
             "description": "scene from a video recording"
         }
     },
-     {
+    {
+        "pk": 1,
+        "model": "base.classificationcodetype",
+        "fields": {
+            "is_choice": true,
+            "gn_description": "available for general disclosure",
+            "identifier": "unclassified",
+            "description": "available for general disclosure"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "base.classificationcodetype",
+        "fields": {
+            "is_choice": true,
+            "gn_description": "not for general disclosure",
+            "identifier": "restricted",
+            "description": "not for general disclosure"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "base.classificationcodetype",
+        "fields": {
+            "is_choice": true,
+            "gn_description": "available for someone who can be entrusted with information",
+            "identifier": "confidential",
+            "description": "available for someone who can be entrusted with information"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "base.classificationcodetype",
+        "fields": {
+            "is_choice": true,
+            "gn_description": "kept or meant to be kept private, unknown, or hidden from all but a select group of people",
+            "identifier": "secret",
+            "description": "kept or meant to be kept private, unknown, or hidden from all but a select group of people"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "base.classificationcodetype",
+        "fields": {
+            "is_choice": true,
+            "gn_description": "of the highest secrecy",
+            "identifier": "topSecret",
+            "description": "of the highest secrecy"
+        }
+    },
+    {
         "pk": 1, 
         "model": "base.restrictioncodetype", 
         "fields": {
