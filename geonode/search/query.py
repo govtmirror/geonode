@@ -43,6 +43,7 @@ _SEARCH_PARAMS = [
     'start',
     'exclude',
     'cache',
+    'classification',
     'category']
 
 # settings API
@@ -104,6 +105,7 @@ class Query(object):
         self.owner = filters.get('owner')
         self.kw = filters.get('kw')
         self.exclude = filters.get('exclude')
+        self.classifications = tuple(filters.get('classification').split(',')) if filters.get('classification') else None
         self.categories = tuple(filters.get('category').split(',')) if filters.get('category') else None
         if self.kw:
             self.kw = tuple(self.kw.split(','))
@@ -205,6 +207,7 @@ def query_from_request(request, extra):
         except KeyError:
             raise BadQuery('valid sorting values are: %s' % sorts.keys())
 
+    params['classification'] = None if 'all' in params.get('classification', '') else params.get('classification', '')
     params['category'] = None if 'all' in params.get('category', '') else params.get('category', '')
     filters = dict([(k,params.get(k,None) or None) for k in _SEARCH_PARAMS])
 

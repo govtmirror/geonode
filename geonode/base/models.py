@@ -222,9 +222,16 @@ class ClassificationCodeType(models.Model):
     description = models.TextField(max_length=255, editable=False)
     gn_description = models.TextField('GeoNode description', max_length=255)
     is_choice = models.BooleanField(default=True)
+    abbreviation = models.TextField(max_length=255, editable=False)
+    name = models.TextField(max_length=255, editable=False)
+    level = models.PositiveSmallIntegerField(null=True, default=0)
 
     def __unicode__(self):
         return self.gn_description
+
+    @property
+    def name_long(self):
+        return self.name+" ("+self.abbreviation+")"
 
     class Meta:
         ordering = ("identifier",)
@@ -382,6 +389,12 @@ class ResourceBase(models.Model, PermissionLevelMixin, ThumbnailMixin):
 
     def keyword_list(self):
         return [kw.name for kw in self.keywords.all()]
+
+    def classification_code_type_string(self):
+       if hasattr(self.classification_code_type, 'identifier'):
+           return self.classification_code_type.identifier
+       else:
+           return None
 
     def spatial_representation_type_string(self):
         if hasattr(self.spatial_representation_type, 'identifier'):

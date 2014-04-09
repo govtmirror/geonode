@@ -65,7 +65,7 @@ MD_CORE_MODEL = {
         'pycsw:Degree': 'degree',
         'pycsw:AccessConstraints': 'accessconstraints',
         'pycsw:OtherConstraints': 'otherconstraints',
-        'pycsw:Classification': 'classification',
+        'pycsw:Classification': 'classification_code_type_string',
         'pycsw:ConditionApplyingToAccessAndUse': \
             'conditionapplyingtoaccessanduse',
         'pycsw:Lineage': 'lineage',

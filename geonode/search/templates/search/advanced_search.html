@@ -44,6 +44,17 @@
                   <input type="radio" name="type" value="owner" id="id_filter_categories_groups" /> {% trans 'Users only' %}
                 </label>
               </div>
+              {% if CLASSIFICATION %}
+                <div class="control-group">
+                  <label for="id_classification">{% trans 'Classification' %}</label>
+                  <select name="classification">
+                    <option value="">{% trans 'Search All Classifications' %}</option>
+                  {% for classification in classification_list %}
+                    <option value="{{ classification.identifier }}">{{ classification }}</option>
+                  {% endfor %}
+                  </select>
+                </div>
+              {% endif %}
               <div class="control-group">
                 <label for="id_category">{% trans 'Category' %}</label>
 

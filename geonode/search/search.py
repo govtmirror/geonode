@@ -29,7 +29,7 @@ from geonode.maps.models import Map
 from geonode.documents.models import Document
 from geonode.layers.models import Layer
 from geonode.people.models import Profile
-from geonode.base.models import TopicCategory, ResourceBase
+from geonode.base.models import ClassificationCodeType, TopicCategory, ResourceBase
 
 from geonode.search import extension
 from geonode.search.models import filter_by_period
@@ -75,6 +75,17 @@ def _filter_security(q, user, model, permission):
         security = security | Q(owner=user)
 
     return q.filter(security)
+
+def _filter_classification(q, classification):
+    _classifications = []
+    for classification in classification:
+        try:
+            _classification.append(ClassificationCodeType.objects.get(identifier=classification))
+        except ClassificationCodeType.DoesNotExist:
+            # FIXME Do something here
+            pass
+
+    return q.filter(classification__in=_classifications)
 
 def _filter_category(q, categories):
     _categories = []
@@ -206,6 +217,9 @@ def _get_map_results(query):
     if query.exclude:
         q = q.exclude(reduce(operator.or_, [Q(title__contains=ex) for ex in query.exclude]))
 
+    if query.classifications:
+        q = _filter_classification(q, query.classifications)
+
     if query.categories:
         q = _filter_category(q, query.categories)
 
@@ -247,6 +261,9 @@ def _get_layer_results(query):
 
     if query.period:
         q = filter_by_period(Layer, q, *query.period)
+
+    if query.classifications:
+        q = _filter_classification(q, query.classifications)
 
     if query.categories:
         q = _filter_category(q, query.categories)
@@ -296,6 +313,9 @@ def _get_document_results(query):
 
     if query.period:
         q = filter_by_period(Document, q, *query.period)
+
+    if query.classifications:
+        q = _filter_classification(q, query.classifications)
 
     if query.categories:
         q = _filter_category(q, query.categories)

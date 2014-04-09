@@ -5,7 +5,7 @@ from django.db.models import Count
 from agon_ratings.models import Rating
 from django.contrib.contenttypes.models import ContentType
 
-from geonode.base.models import TopicCategory
+from geonode.base.models import ClassificationCodeType, TopicCategory
 
 register = template.Library()
 
@@ -18,6 +18,13 @@ def num_ratings(obj):
                 object_id = obj.pk,
                 content_type = ct
     ))
+
+@register.assignment_tag
+def classifications():
+    classifications = ClassificationCodeType.objects.all()
+    for c in counts:
+        classifications = classifications.annotate(**{ '%s_count' % c : Count('resourcebase__%s__classification_code_type' % c)})
+    return classifications
 
 @register.assignment_tag
 def categories():

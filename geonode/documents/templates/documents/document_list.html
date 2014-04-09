@@ -31,7 +31,10 @@
           </div>
           <div id="slide-pane">
             <a href="#" class="toggle toggle-pane"><i class="icon-chevron-left"></i></a>
-            {% with type='document' %} 
+            {% with type='document' %}
+            {% if CLASSIFICATION %}
+            {% include "search/_classification_filter.html" %}
+            {% endif %}
             {% include "search/_extent_filter.html" %}
             {% include "search/_general_filters.html" %}
             {% endwith %}

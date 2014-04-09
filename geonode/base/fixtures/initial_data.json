@@ -256,7 +256,10 @@
             "is_choice": true,
             "gn_description": "available for general disclosure",
             "identifier": "unclassified",
-            "description": "available for general disclosure"
+            "description": "available for general disclosure",
+            "name":"Unclassified",
+            "abbreviation":"U",
+            "level":1
         }
     },
     {
@@ -266,7 +269,10 @@
             "is_choice": true,
             "gn_description": "not for general disclosure",
             "identifier": "restricted",
-            "description": "not for general disclosure"
+            "description": "not for general disclosure",
+            "name":"Restricted",
+            "abbreviation":"R",
+            "level":2
         }
     },
     {
@@ -276,7 +282,10 @@
             "is_choice": true,
             "gn_description": "available for someone who can be entrusted with information",
             "identifier": "confidential",
-            "description": "available for someone who can be entrusted with information"
+            "description": "available for someone who can be entrusted with information",
+            "name":"Confidential",
+            "abbreviation":"C",
+            "level":3
         }
     },
     {
@@ -286,7 +295,10 @@
             "is_choice": true,
             "gn_description": "kept or meant to be kept private, unknown, or hidden from all but a select group of people",
             "identifier": "secret",
-            "description": "kept or meant to be kept private, unknown, or hidden from all but a select group of people"
+            "description": "kept or meant to be kept private, unknown, or hidden from all but a select group of people",
+            "name":"Secret",
+            "abbreviation":"S",
+            "level":4
         }
     },
     {
@@ -296,7 +308,10 @@
             "is_choice": true,
             "gn_description": "of the highest secrecy",
             "identifier": "topSecret",
-            "description": "of the highest secrecy"
+            "description": "of the highest secrecy",
+            "name":"Top Secret",
+            "abbreviation":"TS",
+            "level":5
         }
     },
     {

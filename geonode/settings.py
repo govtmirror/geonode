@@ -577,6 +577,8 @@ SOCIAL_BUTTONS = True
 # Require users to authenticate before using Geonode
 LOCKDOWN_GEONODE = False
 
+CLASSIFICATION = True
+
 # Add additional paths (as regular expressions) that don't require authentication.
 AUTH_EXEMPT_URLS = ()
 
