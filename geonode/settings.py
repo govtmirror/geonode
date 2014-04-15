@@ -577,7 +577,20 @@ SOCIAL_BUTTONS = True
 # Require users to authenticate before using Geonode
 LOCKDOWN_GEONODE = False
 
-CLASSIFICATION = True
+# Enable Classification
+CLASSIFICATION_ENABLED = True
+
+# Which classifications are allowed on this server
+ALLOWED_CLASSIFICATIONS = [
+    'unclassified','confidential','secret','topSecret'
+]
+
+# Where do you want to display classification information.  Options are above, below, metadata, never
+CLASSIFICATION_DISPLAY = 'above'
+
+DISTRIBUTION_RESTRICTIONS_ENABLED = True
+DISTRIBUTION_RESTRICTIONS_DISPLAY = 'above'
+
 
 # Add additional paths (as regular expressions) that don't require authentication.
 AUTH_EXEMPT_URLS = ()

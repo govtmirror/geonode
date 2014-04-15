@@ -18,13 +18,7 @@
 {% block body_class %}documents{% endblock %}
 
 {% block body_outer %}
-  <div class="span6">
-    {% if CLASSIFICATION and document.classification_code_type %}
-        <h2 class="page-title">({{document.classification_code_type.abbreviation}})  {{ document.title }}</h2>
-    {% else %}
-        <h2 class="page-title">{{ document.title }}</h2>
-    {% endif %}
-  </div>
+  <div class="span6"><h2 class="page-title">{{ document.title_with_restrictions }}</h2></div>
   <div class="span6 action-group">
     <!-- <div class="pull-right">
       <div class="btn-group">

@@ -30,8 +30,11 @@
           </div>
           <div id="slide-pane">
             <a href="#" class="toggle toggle-pane"><i class="icon-chevron-left"></i></a>
-            {% if CLASSIFICATION %}
+            {% if CLASSIFICATION_ENABLED %}
                {% include "search/_classification_filter.html" %}
+            {% endif %}
+            {% if DISTRIBUTION_RESTRICTIONS_ENABLED %}
+               {% include "search/_distributionrestriction_filter.html" %}
             {% endif %}
             {% include "search/_type_filters.html" %}
 	          {% include "search/_extent_filter.html" %}

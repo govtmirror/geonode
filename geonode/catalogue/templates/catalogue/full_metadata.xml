@@ -201,11 +201,11 @@
          </gmd:MD_Keywords>
        </gmd:descriptiveKeywords>
        {% endfor %}
-       {% if layer.classification_code_type %}
+       {% if layer.classification %}
        <gmd:resourceConstraints>
          <gmd:MD_SecurityConstraints>
            <gmd:classification>
-             <gmd:MD_ClassificationCode codeSpace="ISOTC211/19115" codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ClassificationCode" codeListValue="{{layer.classification_code_type.identifier}}">{{layer.classification_code_type.identifier}}</gmd:MD_ClassificationCode>
+             <gmd:MD_ClassificationCode codeSpace="ISOTC211/19115" codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ClassificationCode" codeListValue="{{layer.classification_code_type}}">{{layer.classification.identifier}}</gmd:MD_ClassificationCode>
            </gmd:classification>
          </gmd:MD_SecurityConstraints>
        </gmd:resourceConstraints>

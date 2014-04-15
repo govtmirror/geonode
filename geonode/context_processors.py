@@ -46,5 +46,7 @@ def resource_urls(request):
         GS_SECURITY_ENABLED = ogc_server_settings.GEONODE_SECURITY_ENABLED,
         PROXY_URL = getattr(settings, 'PROXY_URL', '/proxy/?url='),
         SOCIAL_BUTTONS = getattr(settings, 'SOCIAL_BUTTONS', True),
-        CLASSIFICATION = getattr(settings, 'CLASSIFICATION', False)
+        CLASSIFICATION_ENABLED = getattr(settings, 'CLASSIFICATION_ENABLED', False),
+        CLASSIFICATION_DISPLAY = getattr(settings, 'CLASSIFICATION_DISPLAY', 'never'),
+        DISTRIBUTION_RESTRICTIONS_ENABLED = getattr(settings, 'DISTRIBUTION_RESTRICTIONS_ENABLED', False)
     )

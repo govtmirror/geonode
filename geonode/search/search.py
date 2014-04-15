@@ -29,7 +29,7 @@ from geonode.maps.models import Map
 from geonode.documents.models import Document
 from geonode.layers.models import Layer
 from geonode.people.models import Profile
-from geonode.base.models import ClassificationCodeType, TopicCategory, ResourceBase
+from geonode.base.models import Classification, TopicCategory, ResourceBase
 
 from geonode.search import extension
 from geonode.search.models import filter_by_period
@@ -80,8 +80,8 @@ def _filter_classification(q, classification):
     _classifications = []
     for classification in classification:
         try:
-            _classification.append(ClassificationCodeType.objects.get(identifier=classification))
-        except ClassificationCodeType.DoesNotExist:
+            _classification.append(Classification.objects.get(identifier=classification))
+        except Classification.DoesNotExist:
             # FIXME Do something here
             pass
 

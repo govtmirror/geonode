@@ -16,10 +16,21 @@
     </li>
   {% endif %}
 
-  {% if resourcebase.classification_code_type %}
+  {% if CLASSIFICATION_ENABLED and CLASSIFICATION_DISPLAY=="above" and resourcebase.classification %}
     <li>
       <strong>{% trans "Classification" %}:</strong>
-      {{ resourcebase.classification_code_type }}
+      {{ resourcebase.classification.name_long }}
+      <strong><a href="#classification-more" data-toggle="collapse" data-target=".classification-more">?</a></strong>
+      <div style="margin-left:20px;" class="classification-more collapse">+ {{ resourcebase.classification.gn_description }}</div>
+    </li>
+  {% endif %}
+
+  {% if resourcebase.distribution_restrictions %}
+    <li>
+      <strong>{% trans "Distribution Restrictions" %}:</strong>
+      {{ resourcebase.distribution_restrictions.name_long }}
+      <strong><a href="#distribution-restrictions-more" data-toggle="collapse" data-target=".distribution-restrictions-more">?</a></strong>
+      <div style="margin-left:20px;" class="distribution-restrictions-more collapse">+ {{ resourcebase.distribution_restrictions.description }}</div>
     </li>
   {% endif %}
 

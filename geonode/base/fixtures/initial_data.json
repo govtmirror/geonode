@@ -251,7 +251,7 @@
     },
     {
         "pk": 1,
-        "model": "base.classificationcodetype",
+        "model": "base.classification",
         "fields": {
             "is_choice": true,
             "gn_description": "available for general disclosure",
@@ -264,7 +264,7 @@
     },
     {
         "pk": 2,
-        "model": "base.classificationcodetype",
+        "model": "base.classification",
         "fields": {
             "is_choice": true,
             "gn_description": "not for general disclosure",
@@ -277,10 +277,10 @@
     },
     {
         "pk": 3,
-        "model": "base.classificationcodetype",
+        "model": "base.classification",
         "fields": {
             "is_choice": true,
-            "gn_description": "available for someone who can be entrusted with information",
+            "gn_description": "This is the lowest classification level of information obtained by the government. It is defined as information that would \"damage\" national security if publicly disclosed, again, without the proper authorization.",
             "identifier": "confidential",
             "description": "available for someone who can be entrusted with information",
             "name":"Confidential",
@@ -290,10 +290,10 @@
     },
     {
         "pk": 4,
-        "model": "base.classificationcodetype",
+        "model": "base.classification",
         "fields": {
             "is_choice": true,
-            "gn_description": "kept or meant to be kept private, unknown, or hidden from all but a select group of people",
+            "gn_description": "This is the second-highest classification.  Information is classified Secret when its unauthorized disclosure would cause \"serious damage\" to national security.",
             "identifier": "secret",
             "description": "kept or meant to be kept private, unknown, or hidden from all but a select group of people",
             "name":"Secret",
@@ -303,15 +303,55 @@
     },
     {
         "pk": 5,
-        "model": "base.classificationcodetype",
+        "model": "base.classification",
         "fields": {
             "is_choice": true,
-            "gn_description": "of the highest secrecy",
+            "gn_description": "The highest security level. Information is classified Top Secret if unauthorized disclosure would cause \"exceptionally grave damage\" to national security.",
             "identifier": "topSecret",
             "description": "of the highest secrecy",
             "name":"Top Secret",
             "abbreviation":"TS",
             "level":5
+        }
+    },
+    {
+        "pk": 1,
+        "model": "base.distributionrestriction",
+        "fields": {
+            "name":"For Official Use Only",
+            "abbreviation":"FOUO",
+            "description":"For official use only",
+            "order":1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "base.distributionrestriction",
+        "fields": {
+            "name":"Sensitive But Unclassified",
+            "abbreviation":"SBU",
+            "description":"Sensitive But Unclassified",
+            "order":2
+        }
+    },
+    {
+        "pk": 3,
+        "model": "base.distributionrestriction",
+        "fields": {
+            "name":"Law Enforcement Sensitive",
+            "abbreviation":"LES",
+            "description":"Law Enforcement Sensitive",
+            "order":3
+        }
+    },
+    {
+        "pk": 10,
+        "model": "base.distributionrestriction",
+        "fields": {
+            "name":"No Foreign",
+            "abbreviation":"NOFORN",
+            "description":"Distribution to non-US citizens is prohibited, regardless of their clearance or access permissions (NO FOReign National access allowed).",
+            "order":10
         }
     },
     {

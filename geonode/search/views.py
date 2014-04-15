@@ -35,7 +35,7 @@ from geonode.search.util import resolve_extension
 from geonode.search.normalizers import apply_normalizers
 from geonode.search.query import query_from_request
 from geonode.search.query import BadQuery
-from geonode.base.models import ClassificationCodeType, TopicCategory
+from geonode.base.models import Classification, TopicCategory
 
 from datetime import datetime
 from time import time
@@ -82,7 +82,7 @@ def search_page(request, template='search/search.html', **kw):
 def advanced_search(request, **kw):
     ctx = {
         'category_list': TopicCategory.objects.all(),
-        'classification_list': ClassificationCodeType.objects.all().order_by('level')
+        'classification_list': Classification.objects.all()
     }
     
     return render_to_response('search/advanced_search.html', RequestContext(request, ctx))

@@ -44,13 +44,24 @@
                   <input type="radio" name="type" value="owner" id="id_filter_categories_groups" /> {% trans 'Users only' %}
                 </label>
               </div>
-              {% if CLASSIFICATION %}
+              {% if CLASSIFICATION_ENABLED %}
                 <div class="control-group">
                   <label for="id_classification">{% trans 'Classification' %}</label>
                   <select name="classification">
                     <option value="">{% trans 'Search All Classifications' %}</option>
                   {% for classification in classification_list %}
                     <option value="{{ classification.identifier }}">{{ classification }}</option>
+                  {% endfor %}
+                  </select>
+                </div>
+              {% endif %}
+              {% if DISTRIBUTION_RESTRICTIONS_ENABLED %}
+                <div class="control-group">
+                  <label for="id_distribution_restrictions">{% trans 'Distribution Restrictions' %}</label>
+                  <select name="distribution_restrictions">
+                    <option value="">{% trans 'Search All Distribution Restrictions' %}</option>
+                  {% for distriction_restriction in distribution_restrictions_list %}
+                    <option value="{{ distribution_restriction.abbreviation }}">{{ distribution_restriction.name }}</option>
                   {% endfor %}
                   </select>
                 </div>

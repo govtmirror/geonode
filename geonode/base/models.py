@@ -211,7 +211,7 @@ class ResourceBaseManager(models.Manager):
                                                 defaults={"name": "Geonode Admin"})[0]
         return contact
 
-class ClassificationCodeType(models.Model):
+class Classification(models.Model):
     """
     Metadata information about the spatial representation type.
     It should reflect a list of codes from TC211
@@ -235,14 +235,24 @@ class ClassificationCodeType(models.Model):
 
     class Meta:
         ordering = ("level",)
-        verbose_name_plural = 'Metadata Classification Code Types'
+        verbose_name_plural = 'Classifications'
 
 class DistributionRestriction(models.Model):
     name = models.CharField(max_length=100)
-    description = models.TextField(null=True, blank=True)
-
+    description = models.TextField(max_length=255, editable=False)
+    abbreviation = models.TextField(max_length=255, editable=False)
+    order = models.PositiveSmallIntegerField(null=True, default=0)   
+ 
     def __unicode__(self):
         return self.name
+
+    @property
+    def name_long(self):
+        return self.name+" ("+self.abbreviation+")"
+
+    class Meta:
+        ordering = ("order",)
+        verbose_name_plural = 'Distribution Restrictions'
 
 class License(models.Model):
     name = models.CharField(max_length=100)
@@ -288,8 +298,8 @@ class ResourceBase(models.Model, PermissionLevelMixin, ThumbnailMixin):
     restriction_code_type = models.ForeignKey(RestrictionCodeType, verbose_name=_('restrictions'), help_text=_('limitation(s) placed upon the access or use of the data.'), null=True, blank=True, limit_choices_to=Q(is_choice=True))
     constraints_other = models.TextField(_('restrictions other'), blank=True, null=True, help_text=_('other restrictions and legal prerequisites for accessing and using the resource or metadata'))
 
-    classification_code_type = models.ForeignKey(ClassificationCodeType, verbose_name=_('classification'), help_text=_('limitation(s) placed upon the access or use of the data.'), null=True, blank=True, limit_choices_to=Q(is_choice=True))
-    #distribution_restriction = models.ForeignKey(DistributionRestriction, null=True, blank=True)
+    classification = models.ForeignKey(Classification, verbose_name=_('classification'), help_text=_('limitation(s) placed upon the access or use of the data.'), null=True, blank=True, limit_choices_to=Q(is_choice=True))
+    distribution_restrictions = models.ForeignKey(DistributionRestriction, null=True, blank=True)
     license = models.ForeignKey(License, null=True, blank=True)
 
     # Section 4
@@ -339,13 +349,17 @@ class ResourceBase(models.Model, PermissionLevelMixin, ThumbnailMixin):
 
     def __unicode__(self):
         return self.title
-
-    def title2(self):
-        if settings.CLASSIFICATION and (not self.classification_code_type is none):
-            return "("+self.classification_code_type.abbreviation +") "+self.title
+   
+    @property
+    def title_with_restrictions(self):
+        if settings.CLASSIFICATION and (not self.classification is None):
+            if not self.distribution_restrictions is None:
+                return "("+self.classification.abbreviation+"//"+self.distribution_restrictions.abbreviation+") "+self.title
+            else:
+                return "("+self.classification.abbreviation+") "+self.title
         else:
             return self.title
-    
+ 
     @property
     def geonode_type(self):
         gn_type = ''
@@ -396,9 +410,9 @@ class ResourceBase(models.Model, PermissionLevelMixin, ThumbnailMixin):
     def keyword_list(self):
         return [kw.name for kw in self.keywords.all()]
 
-    def classification_code_type_string(self):
-       if hasattr(self.classification_code_type, 'identifier'):
-           return self.classification_code_type.identifier
+    def classification_string(self):
+       if hasattr(self.classification, 'identifier'):
+           return self.classification.identifier
        else:
            return None
 

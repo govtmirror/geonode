@@ -2,12 +2,12 @@ from django.contrib import admin
 from django.conf import settings
 
 from geonode.base.models import (TopicCategory, SpatialRepresentationType,
-    Region, RestrictionCodeType, ContactRole, ResourceBase, Link, ClassificationCodeType, DistributionRestriction, License, Thumbnail)
+    Region, RestrictionCodeType, ContactRole, ResourceBase, Link, Classification, DistributionRestriction, License, Thumbnail)
 
-class ClassificationCodeTypeAdmin(admin.ModelAdmin):
-    model = RestrictionCodeType
+class ClassificationAdmin(admin.ModelAdmin):
+    model = Classification
     list_display_links = ('identifier',)
-    list_display = ('identifier', 'description', 'gn_description', 'is_choice')
+    list_display = ('identifier', 'name', 'abbreviation', 'description', 'gn_description', 'is_choice', 'level')
 
     def has_add_permission(self, request):
         # the records are from the standard TC 211 list, so no way to add
@@ -18,8 +18,10 @@ class ClassificationCodeTypeAdmin(admin.ModelAdmin):
         return False
 
 class DistributionRestrictionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name')
-    list_display = ('name',)
+    model = DistributionRestriction
+    list_display_links = ('id',)
+    list_display = ('id', 'name', 'abbreviation', 'description', 'order')
+    #list_editable = ('name','abbreviation','description','order')
 
 class LicenseAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
@@ -126,5 +128,5 @@ admin.site.register(ResourceBase, ResourceBaseAdmin)
 admin.site.register(Link, LinkAdmin)
 admin.site.register(Thumbnail, ThumbnailAdmin)
 admin.site.register(License, LicenseAdmin)
-admin.site.register(ClassificationCodeType, ClassificationCodeTypeAdmin)
+admin.site.register(Classification, ClassificationAdmin)
 admin.site.register(DistributionRestriction, DistributionRestrictionAdmin)
