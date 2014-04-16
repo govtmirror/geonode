@@ -586,7 +586,7 @@ ALLOWED_CLASSIFICATIONS = [
 ]
 
 # Where do you want to display classification information.  Options are above, below, metadata, never
-CLASSIFICATION_DISPLAY = 'above'
+CLASSIFICATION_DISPLAY = 'below'
 
 DISTRIBUTION_RESTRICTIONS_ENABLED = True
 DISTRIBUTION_RESTRICTIONS_DISPLAY = 'above'

@@ -201,7 +201,7 @@
          </gmd:MD_Keywords>
        </gmd:descriptiveKeywords>
        {% endfor %}
-       {% if layer.classification %}
+       {% if layer.classification and CLASSIFICATION_DISPLAY != 'never' %}
        <gmd:resourceConstraints>
          <gmd:MD_SecurityConstraints>
            <gmd:classification>
@@ -217,7 +217,7 @@
              <gmd:MD_RestrictionCode codeSpace="ISOTC211/19115" codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_RestrictionCode" codeListValue="license">license</gmd:MD_RestrictionCode>
            </gmd:useConstraints>
            <gmd:otherConstraints>
-             <gco:CharacterString>{{layer.license.name}} ({{layer.license.url}})</gco:CharacterString>
+             <gco:CharacterString>{{layer.license.name_long}}: {{layer.license.description}} ({{layer.license.url}})</gco:CharacterString>
            </gmd:otherConstraints>
          </gmd:MD_LegalConstraints>
        </gmd:resourceConstraints>

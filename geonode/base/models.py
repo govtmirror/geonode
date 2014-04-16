@@ -231,7 +231,21 @@ class Classification(models.Model):
 
     @property
     def name_long(self):
-        return self.name+" ("+self.abbreviation+")"
+        if self.abbreviation is None and len(self.abbreviation)==0:
+            return self.name
+        else:
+            return self.name+" ("+self.abbreviation+")"
+
+    @property
+    def description_bullets(self):
+        if self.description is None or len(self.description)==0:
+            return ""
+        else:
+                bullets = []
+                lines = self.description.split("\n")
+                for line in lines:
+                        bullets.append("+ "+line)
+                return bullets
 
     class Meta:
         ordering = ("level",)
@@ -239,8 +253,8 @@ class Classification(models.Model):
 
 class DistributionRestriction(models.Model):
     name = models.CharField(max_length=100)
-    description = models.TextField(max_length=255, editable=False)
     abbreviation = models.TextField(max_length=255, editable=False)
+    description = models.TextField(max_length=255, editable=False)
     order = models.PositiveSmallIntegerField(null=True, default=0)   
  
     def __unicode__(self):
@@ -248,7 +262,21 @@ class DistributionRestriction(models.Model):
 
     @property
     def name_long(self):
-        return self.name+" ("+self.abbreviation+")"
+        if self.abbreviation is None and len(self.abbreviation)==0:
+            return self.name
+        else:
+            return self.name+" ("+self.abbreviation+")"
+
+    @property
+    def description_bullets(self):
+        if self.description is None or len(self.description)==0:
+            return ""
+        else:
+                bullets = []
+                lines = self.description.split("\n")
+                for line in lines:
+                        bullets.append("+ "+line)
+                return bullets
 
     class Meta:
         ordering = ("order",)
@@ -256,12 +284,35 @@ class DistributionRestriction(models.Model):
 
 class License(models.Model):
     name = models.CharField(max_length=100)
+    abbreviation = models.TextField(max_length=255, editable=False)
     description = models.TextField(null=True, blank=True)
     url = models.URLField(max_length=2000, null=True, blank=True)
     license_text = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def name_long(self):
+        if self.abbreviation is None or len(self.abbreviation)==0:
+            return self.name
+        else: 
+            return self.name+" ("+self.abbreviation+")"
+
+    @property
+    def description_bullets(self):
+        if self.description is None or len(self.description)==0:
+            return ""
+        else:
+		bullets = []
+		lines = self.description.split("\n")
+		for line in lines:
+			bullets.append("+ "+line)
+		return bullets
+			
+    class Meta:
+        ordering = ("name",)
+        verbose_name_plural = 'Licenses'
 
 
 class ResourceBase(models.Model, PermissionLevelMixin, ThumbnailMixin):
@@ -299,7 +350,7 @@ class ResourceBase(models.Model, PermissionLevelMixin, ThumbnailMixin):
     constraints_other = models.TextField(_('restrictions other'), blank=True, null=True, help_text=_('other restrictions and legal prerequisites for accessing and using the resource or metadata'))
 
     classification = models.ForeignKey(Classification, verbose_name=_('classification'), help_text=_('limitation(s) placed upon the access or use of the data.'), null=True, blank=True, limit_choices_to=Q(is_choice=True))
-    distribution_restrictions = models.ForeignKey(DistributionRestriction, null=True, blank=True)
+    distribution_restrictions = models.ManyToManyField(DistributionRestriction, verbose_name=_('distribution restrictions'), help_text=_('select applicable distribution restrictions'), blank=True)
     license = models.ForeignKey(License, null=True, blank=True)
 
     # Section 4
@@ -352,13 +403,54 @@ class ResourceBase(models.Model, PermissionLevelMixin, ThumbnailMixin):
    
     @property
     def title_with_restrictions(self):
-        if settings.CLASSIFICATION and (not self.classification is None):
+        if settings.CLASSIFICATION_ENABLED and (not self.classification is None):
             if not self.distribution_restrictions is None:
-                return "("+self.classification.abbreviation+"//"+self.distribution_restrictions.abbreviation+") "+self.title
+                return "("+self.classification.abbreviation+"//"+("//".join(self.distribution_restrictions_abbreviations))+") "+self.title
             else:
                 return "("+self.classification.abbreviation+") "+self.title
         else:
             return self.title
+
+    @property
+    def distribution_restrictions_names_and_abbreviations(self):
+       if self.distribution_restrictions is None or len(self.distribution_restrictions.all())==0:
+           return ""
+       else:
+           str = ""
+           names = []
+           abbreviations = []
+           for restriction in self.distribution_restrictions.all():
+               names.append(restriction.name)
+               abbreviations.append(restriction.abbreviation)
+           
+           if len(names) > 0:
+               str += ", ".join(names)
+           if len(abbreviations) > 0:
+               str += " ("+"//".join(abbreviations)+")"
+           return str
+
+    @property
+    def distribution_restrictions_abbreviations(self):
+       if self.distribution_restrictions is None or len(self.distribution_restrictions.all())==0:
+           return ""
+       else:
+           str = ""
+           abbreviations = []
+           for restriction in self.distribution_restrictions.all():
+               abbreviations.append(restriction.abbreviation)
+           
+           return abbreviations
+
+    @property
+    def distribution_restrictions_description_bullets(self):
+        if self.distribution_restrictions is None or len(self.distribution_restrictions.all())==0:
+            return ""
+        else:
+                bullets = []
+                for restriction in self.distribution_restrictions.all():
+                    for bullet in restriction.description_bullets:
+                        bullets.append(bullet)
+                return bullets
  
     @property
     def geonode_type(self):
