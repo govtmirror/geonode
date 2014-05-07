@@ -23,7 +23,7 @@
       <strong><a href="#classification-more" data-toggle="collapse" data-target=".classification-more">?</a></strong>
       <div style="margin-left:20px;" class="classification-more collapse">
       {% for bullet in resourcebase.classification.description_bullets %}
-        {{ bullet }}<br/><br/>
+        {{ bullet }}<br/>
       {% endfor %}
       </div>
     </li>
@@ -35,8 +35,11 @@
       {{ resourcebase.distribution_restrictions_names_and_abbreviations }}
       <strong><a href="#distribution-restrictions-more" data-toggle="collapse" data-target=".distribution-restrictions-more">?</a></strong>
       <div style="margin-left:20px;" class="distribution-restrictions-more collapse">
-      {% for bullet in resourcebase.distribution_restrictions_description_bullets %}
-        {{ bullet }}<br/><br/>
+      {% for restriction in resourcebase.distribution_restrictions.all %}
+        <u>{{ restriction.abbreviation}}</u><br/>
+        {% for bullet in restriction.description_bullets %}
+          {{ bullet }}<br/><br/>
+        {% endfor %}
       {% endfor %}
     </li>
   {% endif %}

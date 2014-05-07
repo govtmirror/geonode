@@ -440,17 +440,6 @@ class ResourceBase(models.Model, PermissionLevelMixin, ThumbnailMixin):
                abbreviations.append(restriction.abbreviation)
            
            return abbreviations
-
-    @property
-    def distribution_restrictions_description_bullets(self):
-        if self.distribution_restrictions is None or len(self.distribution_restrictions.all())==0:
-            return ""
-        else:
-                bullets = []
-                for restriction in self.distribution_restrictions.all():
-                    for bullet in restriction.description_bullets:
-                        bullets.append(bullet)
-                return bullets
  
     @property
     def geonode_type(self):

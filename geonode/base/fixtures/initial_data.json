@@ -358,15 +358,26 @@
         "pk": 1,
         "model": "base.license",
         "fields": {
-            "name":"Public Domain",
+            "name":"Public Domain / Dedication",
             "abbreviation":"",
-            "description":"This project constitutes a work of the United States Government and is not subject to domestic copyright protection under 17 USC § 105.",
+            "description":"Works in the public domain may be used freely without the permission of the former copyright owner.\n",
+            "url":"https://raw.githubusercontent.com/state-hiu/cybergis-licenses/master/licenses/PUBLICDOMAIN-LICENSE-RAW.txt",
+            "license_text":""
+        }
+    },
+    {
+        "pk": 2,
+        "model": "base.license",
+        "fields": {
+            "name":"Public Domain / USG",
+            "abbreviation":"",
+            "description":"Works in the public domain may be used freely without the permission of the former copyright owner.\nThis project constitutes a work of the United States Government and is not subject to domestic copyright protection under 17 USC § 105.",
             "url":"https://raw.githubusercontent.com/state-hiu/cybergis-licenses/master/licenses/PUBLICDOMAIN-LICENSE-RAW.txt",
             "license_text":"This project constitutes a work of the United States Government and is not subject to domestic copyright protection under 17 USC § 105."
         }
     },
     {
-        "pk": 2,
+        "pk": 3,
         "model": "base.license",
         "fields": {
             "name":"NextView",
