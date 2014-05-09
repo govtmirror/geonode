@@ -1,0 +1,35 @@
+[
+    {
+        "pk": 1, 
+        "model": "announcements.announcementLevel", 
+        "fields": {
+           "identifer":"general".
+           "name":"General",
+           "description":"A general announcement with no urgency or severity.  For example, new data was added to a dataset.",
+           "severity":1,
+           "urgency":1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "announcements.announcementLevel",
+        "fields": {
+           "identifer":"warning".
+           "name":"Warning",
+           "description":"A warning with no particular urgency.  For example, an error in a dataset was discovered and users should update to the new dataset at their convenience.",
+           "severity":2,
+           "urgency":1
+        }
+    },
+    {
+        "pk": 3,
+        "model": "announcements.announcementLevel",
+        "fields": {
+           "identifer":"critical".
+           "name":"Critical",
+           "description":"An extremely critical warning that requires immediate action.  For example, a critical error was discovered in a dataset.  Any users of the dataset should cease using it immediately immediately.",
+           "severity":2,
+           "urgency":2
+        }
+    }
+]
