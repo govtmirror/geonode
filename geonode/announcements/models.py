@@ -39,15 +39,22 @@ class Announcement(models.Model):
     An announcement is information that can be broadcast to a specified audience: public, all users, specific layers, maps, documents, etc.
     """
     title = models.CharField(max_length=100)
-    description = models.TextField(null=True, blank=True)
+    type = models.ForeignKey(AdnnouncementType)
+    message = models.TextField(null=True, blank=True)
     dateCreated = models.DateTimeField(_('date'), default = datetime.datetime.now, help_text=_('Date & Time announcement created by owner'))
     owner = models.ForeignKey(Profile, null=False, blank=False)
+    dateStart = models.DateTimeField(_('date'), default = datetime.datetime.now, help_text=_('Date & Time announcement starts'))
+    dateEnd = models.DateTimeField(_('date'), default = datetime.datetime.now, help_text=_('Date & Time announcement ends'))
     
     def __unicode__(self):
         return self.title
     
+    @property
+    def url(self):
+        return ("announcement_detail", [str(self.pk)])
+
     class Meta:
-        ordering = _("-created")
+        ordering = _("-dateCreated")
         verbose_name_plural = _("Announcements")
 
 class Dismissal(models.Model):
@@ -62,3 +69,5 @@ class Dismissal(models.Model):
     class Meta:
         ordering = _("-dismissalDate")
         verbose_name_plural = _("Dismissals")
+
+

@@ -134,9 +134,9 @@
         {% for announcement in site_wide_announcements %}
         <div class="alert alert-block announcement">
           <a type="button" class="close" data-dismiss="alert" data-dismiss-url="{% url "announcements_dismiss" announcement.pk %}" href="#">×</a>
-          <h4><a href="{{ announcement.get_absolute_url }}">{{ announcement }}</a></h4>
-          <p><small><em>{{ announcement.creation_date }}</em></small></p>
-          <div>{{ announcement.content }}</div>
+          <h4><a href="{{ announcement.url }}">{{ announcement }}</a></h4>
+          <p><small><em>{{ announcement.dateCreated }}</em></small></p>
+          <div>{{ announcement.message }}</div>
         </div>
         {% endfor %}
       </div>

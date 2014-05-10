@@ -165,6 +165,7 @@ GEONODE_APPS = (
     'geonode.social',
     'geonode.catalogue',
     'geonode.documents',
+    'geonode.announcements',
 
     # GeoServer Apps
     'geonode.geoserver',
@@ -210,7 +211,6 @@ INSTALLED_APPS = (
     'dialogos',
     'agon_ratings',
     'notification',
-    'announcements',
     'actstream',
     'user_messages',
     'tastypie',

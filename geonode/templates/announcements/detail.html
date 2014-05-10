@@ -5,12 +5,12 @@
 
 {% block body %}
     <h2 class="page-title">{{ announcement.title }}</h2>
-    <p>{{ announcement.creation_date }}</p>
+    <p>{{ announcement.dateCreated }}</p>
     <br/>
     <div class="span10">
     <blockquote>
-        <p>{{ announcement.content }}</p>
-        <small>{{ announcement.creator }}</small>
+        <p>{{ announcement.description }}</p>
+        <small>{{ announcement.owner }}</small>
     </blockquote>
 
 {% endblock %}
