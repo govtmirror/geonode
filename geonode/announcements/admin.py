@@ -2,11 +2,11 @@ from django.contrib import admin
 from geonode.announcements.models import Announcement, AnnouncementType, Dismissal, DismissalType
 
 class AnnouncementAdmin(admin.ModelAdmin):
-    model = 
+    model = Announcement
     list_display = ('id', 'title', 'dateCreated', 'type', 'message','owner')
-    list_display_links = ('id')
-    list_filter  = ('date')
-    search_fields = ('title')
+    list_display_links = ('id',)
+    list_filter  = ('dateCreated',)
+    search_fields = ('title',)
     date_hierarchy = 'dateCreated'
 
 class AnnouncementTypeAdmin(admin.ModelAdmin):
@@ -23,7 +23,7 @@ class AnnouncementTypeAdmin(admin.ModelAdmin):
 class DismissalAdmin(admin.ModelAdmin):
     model = Dismissal
     list_display_links = ('id',)
-    list_display = ('id','description')
+    list_display = ('id',)
 
 class DismissalTypeAdmin(admin.ModelAdmin):
     model = DismissalType
