@@ -20,10 +20,16 @@
 
 from django.contrib.auth.decorators import login_required
 from django.conf.urls.defaults import patterns, url
-#from .views import DocumentUploadView, DocumentUpdateView
+
+from geonode.announcements.views import AnnouncementPublishView
+
 js_info_dict = {
     'packages': ('geonode.announcements',),
 }
 
 urlpatterns = patterns('geonode.announcements.views',
+    url(r'^$', 'announcement_list', name='announcements_list'),
+    url(r"^announcement/(?P<pk>\d+)/dismiss/$", 'announcement_dismiss', name="announcements_dismiss"),
+    #url(r"^announcement/publish/$", AnnouncementPublishView.as_view(), name="announcements_publish")
+    url(r"^announcement/publish/$", "announcement_publish", name="annoucements_publish")
 )

@@ -16,7 +16,7 @@
         "fields": {
            "identifier":"warning",
            "name":"Warning",
-           "description":"A warning with no particular urgency.  For example, an error in a dataset was discovered and users should update to the new dataset at their convenience.",
+           "description":"A warning with no particular urgency.  For example, a minor error in a dataset was discovered and users should update to the new dataset at their convenience.",
            "severity": 2,
            "urgency": 1
         }
@@ -27,9 +27,51 @@
         "fields": {
            "identifier": "critical",
            "name": "Critical",
-           "description": "An extremely critical warning that requires immediate action.  For example, a critical error was discovered in a dataset.  Any users of the dataset should cease using it immediately immediately.",
-           "severity": 2,
+           "description": "An critical warning that requires action as soon as reasonably possible.  For example, a non-mission critical data point was missing in a dataset.  Any users of the dataset should update to the newest version as soon as reasonably possible.",
+           "severity": 3,
            "urgency": 2
+        }
+    },
+    {
+        "pk": 4,
+        "model": "announcements.announcementtype",
+        "fields": {
+           "identifier": "supercritical",
+           "name": "Super Critical",
+           "description": "A super critical warning that requires immediate action.  For example, a critical error was discovered in a dataset.  Any users of the dataset should cease using it immediately.",
+           "severity": 3,
+           "urgency": 3
+        }
+    },
+    {
+        "pk": 1,
+        "model": "announcements.dismissaltype",
+        "fields": {
+           "identifier": "session",
+           "name": "Session",
+           "description": "Announcement dismissed for the active session only"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "announcements.dismissaltype",
+        "fields": {
+           "identifier": "permanent",
+           "name": "Permanent",
+           "description": "Announcement dismissed permanently"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "announcements.announcement",
+        "fields": {
+           "title": "Test Public Title",
+           "type": 1,
+           "message": "Test Public Message",
+           "dateCreated": "2014-05-10T17:42:56",
+
+           "target_public": true,
+           "target_all_users": false
         }
     }
 ]
