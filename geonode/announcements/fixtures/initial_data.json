@@ -47,13 +47,22 @@
         "pk": 1,
         "model": "announcements.dismissaltype",
         "fields": {
+           "identifier": "none",
+           "name": "None",
+           "description": "Announcement cannot be dismissed"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "announcements.dismissaltype",
+        "fields": {
            "identifier": "session",
            "name": "Session",
            "description": "Announcement dismissed for the active session only"
         }
     },
     {
-        "pk": 2,
+        "pk": 3,
         "model": "announcements.dismissaltype",
         "fields": {
            "identifier": "permanent",
@@ -70,8 +79,11 @@
            "message": "Test Public Message",
            "dateCreated": "2014-05-10T17:42:56",
 
-           "target_public": true,
-           "target_all_users": false
+           "audience_public": true,
+           "audience_all_users": false,
+
+           "scope_sitewide": true,
+           "scope_welcome": false
         }
     }
 ]

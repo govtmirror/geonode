@@ -38,12 +38,15 @@ class Announcement(models.Model):
     type = models.ForeignKey(AnnouncementType, null=True, blank=True)
     message = models.TextField(null=True, blank=True)
     dateCreated = models.DateTimeField(_('Date Created'), default = datetime.datetime.now, help_text=_('The date & time the announcement was created.'))
-    dateStart = models.DateTimeField(_('Start Date'), default = None, null=True, blank=True, help_text=_('The date & time the announcement is published.  If null, announcement is published immediately.'))
-    dateEnd = models.DateTimeField(_('End Date'), default = None, null=True, blank=True, help_text=_('The date & time the announcement expires.  If null, announcement never expires.'))
+    dateStart = models.DateTimeField(_('Start Date'), default = None, null=True, blank=True, help_text=_('The date & time the announcement is published.  If null, announcement is published immediately.  Format is YYY-MM-DD HH:mm:ss.'))
+    dateEnd = models.DateTimeField(_('End Date'), default = None, null=True, blank=True, help_text=_('The date & time the announcement expires.  If null, announcement never expires.  Format is YYY-MM-DD HH:mm:ss.'))
     owner = models.ForeignKey(User, null=True, blank=False)
     #Audience Variables
-    target_public = models.BooleanField(_("Visible to the Public"), default=False, help_text=_('The announcement is visible to the public (i.e., anonymous users).'))
-    target_all_users = models.BooleanField(_("Visible to All Users"), default=False, help_text=_('The announcement is visible to all authenticated users.'))
+    audience_public = models.BooleanField(_("Visible to the Public (Audience)"), default=False, help_text=_('The announcement is visible to the public (i.e., anonymous users).'))
+    audience_all_users = models.BooleanField(_("Visible to All Users (Audience)"), default=False, help_text=_('The announcement is visible to all authenticated users.'))
+
+    scope_sitewide = models.BooleanField(_("Display Site-wide (Scope)"), default=False, help_text=_('The announcement is visible on almost all pages.  Use this scope for imminent unscheduled maintenance downtime, etc.'))
+    scope_welcome = models.BooleanField(_("Display on Welcome Page (Scope)"), default=False, help_text=_('The announcement is visible on the welcome page.'))
     #target_users = models.ManyToManyField(AnnouncementUserTarget,related_name='target_users')
 
     #usertargets
@@ -66,7 +69,7 @@ class AnnouncementUserTarget(models.Model):
     target = models.ForeignKey(Profile, help_text=_('A target user for the announcement.'))
 
     def __unicode__(self):
-        return self.name
+        return self.announcement.title+" - "+self.target.name
 
     class Meta:
         ordering = ("-announcement__dateCreated","target__name")
@@ -77,22 +80,22 @@ class AnnouncementGroupTarget(models.Model):
     target = models.ForeignKey(Group, help_text=_('A target group for the announcement.'))
 
     def __unicode__(self):
-        return self.name
+        return self.announcement.title+" - "+self.target.name
 
     class Meta:
         ordering = ("-announcement__dateCreated","target__title")
-        verbose_name_plural = _("Announcement Group Target")
+        verbose_name_plural = _("Announcement Group Targets")
 
 class AnnouncementResourceTarget(models.Model):
     announcement = models.ForeignKey(Announcement, help_text=_('The announcement'))
     target = models.ForeignKey(ResourceBase, help_text=_('The target resource for the announcement.  The announcement is displayed on each resource target detail page.'))
 
     def __unicode__(self):
-        return self.name
+        return self.announcement.title+" - "+self.target.title
 
     class Meta:
         ordering = ("-announcement__dateCreated","target__title")
-        verbose_name_plural = _("Announcement Resource Target")
+        verbose_name_plural = _("Announcement Resource Targets")
 
 class DismissalType(models.Model):
     identifier = models.CharField(max_length=255, editable=False)
@@ -108,7 +111,7 @@ class DismissalType(models.Model):
 
 class AnnouncementDismissalOption(models.Model):
     announcement = models.ForeignKey(Announcement, help_text=_('The announcement'))
-    type = models.ForeignKey(DismissalType, help_text=_('The type of dismissal available (session, permament, etc.).'))
+    type = models.ForeignKey(DismissalType, help_text=_('The type of dismissal available (none, session, permament, etc.).'))
 
     def __unicode__(self):
         return self.name

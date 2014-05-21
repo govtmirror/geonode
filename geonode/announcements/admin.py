@@ -23,17 +23,17 @@ class AnnouncementTypeAdmin(admin.ModelAdmin):
 class AnnouncementUserTargetAdmin(admin.ModelAdmin):
     model = AnnouncementUserTarget
     list_display_links = ('id',)
-    list_display = ('id', )
+    list_display = ('id', 'announcement','target',)
 
 class AnnouncementGroupTargetAdmin(admin.ModelAdmin):
     model = AnnouncementGroupTarget
     list_display_links = ('id',)
-    list_display = ('id', )
+    list_display = ('id', 'announcement','target',)
 
 class AnnouncementResourceTargetAdmin(admin.ModelAdmin):
     model = AnnouncementResourceTarget
     list_display_links = ('id',)
-    list_display = ('id', )
+    list_display = ('id', 'announcement','target',)
 
 class AnnouncementDismissalOptionAdmin(admin.ModelAdmin):
     model = AnnouncementDismissalOption

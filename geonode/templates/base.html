@@ -77,9 +77,7 @@
                   {% if user.is_staff %}
                   <li><a href="{% url "admin:index" %}"><i class="icon-cog"></i> {% trans "Admin" %}</a></li>
                   {% endif %}
-                  {% if perms.announcements.can_manage %}
-                  <li><a href="{% url "announcements_list" %}"><i class="icon-bullhorn"></i> {% trans "Announcements" %}</a></li>
-                  {% endif %}
+                  <li><a href="{% url "announcement_list" %}"><i class="icon-bullhorn"></i> {% trans "Announcements" %}</a></li>
                   {% if user.is_superuser %}
                   <li><a href="{{ GEOSERVER_BASE_URL }}"><i class="icon-globe"></i> {% trans "GeoServer" %}</a></li>
                   {% endif %}
@@ -127,13 +125,12 @@
     {% endblock header %}
 
     {% block middle %}
-    {% announcements as site_wide_announcements %}
     <div class="content-wrap">
-      {% if site_wide_announcements %}
+      {% if announcements %}
       <div id="site_wide_announcements">
-        {% for announcement in site_wide_announcements %}
+        {% for announcement in announcements %}
         <div class="alert alert-block announcement">
-          <a type="button" class="close" data-dismiss="alert" data-dismiss-url="{% url "announcements_dismiss" announcement.pk %}" href="#">×</a>
+          <a type="button" class="close" data-dismiss="alert" data-dismiss-url="{% url "announcement_dismiss" announcement.pk %}" href="#">×</a>
           <h4><a href="{{ announcement.url }}">{{ announcement }}</a></h4>
           <p><small><em>{{ announcement.dateCreated }}</em></small></p>
           <div>{{ announcement.message }}</div>
