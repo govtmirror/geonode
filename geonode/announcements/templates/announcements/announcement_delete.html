@@ -8,8 +8,8 @@
   <div class="col-md-8">
     <form action="{% url "announcement_delete" announcement.id %}" method="POST">
       <h2>
-        {% blocktrans with announcement.title as announcement__title %}
-          Are you sure you want to remove {{ announcement_title }}?
+        {% blocktrans with announcement.title as announcement_title %}
+          Are you sure you want to delete announcement {{ announcement_title }}?
         {% endblocktrans %}
       </h2>
       {% csrf_token %}

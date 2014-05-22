@@ -21,15 +21,16 @@
 from django.contrib.auth.decorators import login_required
 from django.conf.urls.defaults import patterns, url
 
-from geonode.announcements.views import AnnouncementPublishView
+#from geonode.announcements.views import AnnouncementPublishView
 
 js_info_dict = {
     'packages': ('geonode.announcements',),
 }
 
 urlpatterns = patterns('geonode.announcements.views',
-    url(r'^$', 'announcement_list', name='announcements_list'),
-    url(r"^announcement/(?P<pk>\d+)/dismiss/$", 'announcement_dismiss', name="announcements_dismiss"),
-    #url(r"^announcement/publish/$", AnnouncementPublishView.as_view(), name="announcements_publish")
-    url(r"^announcement/publish/$", "announcement_publish", name="annoucements_publish")
+    url(r'^$', 'announcement_list', name='announcement_list'),
+    url(r"^announcement/(?P<pk>\d+)/dismiss/$", 'announcement_dismiss', name="announcement_dismiss"),
+    url(r"^publish/$", "announcement_publish", name="announcement_publish"),
+    url(r'^(?P<announcement_id>\d+)/edit$', "announcement_edit", name="announcement_edit"),
+    url(r'^(?P<announcement_id>\d+)/delete$', "announcement_delete", name="announcement_delete"),
 )

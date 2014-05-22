@@ -60,6 +60,37 @@ class Announcement(models.Model):
     def url(self):
         return ("announcement_detail", [str(self.pk)])
 
+    @property
+    def audience(self):
+        if self.audience_public:
+            return "Public"
+        elif self.audience_all_users:
+            return "All Authenticated Users"
+        else:
+            users = get_audience_users_for_announcement(self)
+            groups = get_audience_groups_for_announcement(self)
+            if len(users)>0 and len(groups)>0:
+                return "Mix of Users and Groups"
+            elif len(users)>0:
+                return "Muliple Users"
+            elif len(groups)>0:
+                return "Multiple Groups"
+            else:
+                return "No Audience"
+
+    @property
+    def scope(self):
+        if self.scope_sitewide:
+            return "Site-Wide"
+        elif self.scope_welcome:
+            return "Welcome"
+        else:
+            resources = get_scope_resources_for_announcement(self)
+            if len(resources)>0:
+                return "Multiple Resources"
+            else:
+                return "No Scope"
+
     class Meta:
         ordering = ("-dateCreated",)
         verbose_name_plural = _("Announcements")
@@ -135,3 +166,12 @@ class Dismissal(models.Model):
 
 def getActiveAnnouncements(request, **kwargs):
     return Announcement.objects.all();
+
+def get_audience_users_for_announcement(announcement):
+    return ([target.target for target in AnnouncementUserTarget.objects.filter(announcement=announcement)])
+
+def get_audience_groups_for_announcement(announcement):
+    return ([target.target for target in AnnouncementGroupTarget.objects.filter(announcement=announcement)])
+
+def get_scope_resources_for_announcement(announcement):
+    return ([target.target for target in AnnouncementResourceTarget.objects.filter(announcement=announcement)])
