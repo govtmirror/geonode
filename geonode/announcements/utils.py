@@ -123,7 +123,7 @@ def getResourceAsChoice(resource):
     type_id = ContentType.objects.get_for_model(resource.__class__).id
     obj_id = resource.id
     form_value = "type:%s-id:%s" % (type_id, obj_id)
-    display_text = '%s (%s)' % (resource.name, resource.polymorphic_ctype.model)
+    display_text = '%s (%s)' % (resource.title, resource.polymorphic_ctype.model)
     return [form_value, display_text]
 
 def get_scope_resources_for_announcement_as_values(announcement):
