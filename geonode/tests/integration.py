@@ -35,7 +35,7 @@ from django.test import LiveServerTestCase as TestCase
 from django.core.urlresolvers import reverse
 from django.contrib.staticfiles.templatetags import staticfiles
 
-from geoserver.catalog import FailedRequestError
+from geoserver.catalog import FailedRequestError, UploadError
 
 from geonode.security.models import *
 from geonode.layers.models import Layer
@@ -132,6 +132,16 @@ class GeoNodeMapTest(TestCase):
         pass
 
     # geonode.maps.utils
+
+    def test_raster_upload(self):
+        """Test that the wcs links are correctly created for a raster"""
+        filename = os.path.join(gisdata.GOOD_DATA, 'raster/test_grid.tif')
+        uploaded = file_upload(filename)
+        wcs_link = False
+        for link in uploaded.link_set.all():
+            if link.mime == 'GeoTIFF':
+                wcs_link = True
+        self.assertTrue(wcs_link)
 
     def test_layer_upload(self):
         """Test that layers can be uploaded to running GeoNode/GeoServer
@@ -288,6 +298,8 @@ class GeoNodeMapTest(TestCase):
         thefile = os.path.join(gisdata.BAD_DATA, 'points_epsg2249_no_prj.shp')
         try:
             uploaded = file_upload(thefile, overwrite=True)
+        except UploadError, e:
+            pass
         except GeoNodeException, e:
             pass
         except Exception, e:

@@ -22,15 +22,19 @@ import logging
 
 from datetime import datetime
 
+
 from django.db import models
 from django.db.models import signals
 from django.contrib.contenttypes.models import ContentType
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from django.core.exceptions import MultipleObjectsReturned
 
 from geonode.base.models import ResourceBase, ResourceBaseManager, Link
 from geonode.base.models import SpatialRepresentationType, TopicCategory
+from geonode.base.models import Thumbnail
 from geonode.people.utils import get_valid_user
 from geonode.layers.metadata import set_metadata
 from agon_ratings.models import OverallRating
@@ -63,19 +67,6 @@ class LayerManager(ResourceBaseManager):
     def __init__(self):
         models.Manager.__init__(self)
 
-        
-def add_bbox_query(q, bbox):
-    '''modify the queryset q to limit to the provided bbox
-
-    bbox - 4 tuple of floats representing x0,x1,y0,y1
-    returns the modified query
-    '''
-    bbox = map(str, bbox) # 2.6 compat - float to decimal conversion
-    q = q.filter(bbox_x0__gte=bbox[0])
-    q = q.filter(bbox_x1__lte=bbox[1])
-    q = q.filter(bbox_y0__gte=bbox[2])
-    return q.filter(bbox_y1__lte=bbox[3])
-
 
 class Layer(ResourceBase):
     """
@@ -90,13 +81,12 @@ class Layer(ResourceBase):
     name = models.CharField(max_length=128)
     typename = models.CharField(max_length=128, unique=True, null=True, blank=True)
 
-    popular_count = models.IntegerField(default=0)
-    share_count = models.IntegerField(default=0)
-
     default_style = models.ForeignKey(Style, related_name='layer_default_style', null=True, blank=True)
     styles = models.ManyToManyField(Style, related_name='layer_styles')
 
     charset = models.CharField(max_length=255, default='UTF-8')
+
+    upload_session = models.ForeignKey('UploadSession', blank=True, null=True)
 
     def is_vector(self):
         return self.storeType == 'dataStore'
@@ -109,18 +99,48 @@ class Layer(ResourceBase):
         }).get(self.storeType, "Data")
 
     @property
+    def data_model(self):
+        if hasattr(self, 'modeldescription_set'):
+            lmd = self.modeldescription_set.all()
+            if lmd.exists():
+                return lmd.get().get_django_model()
+
+        return None
+
+    @property
+    def data_objects(self):
+        if self.data_model is not None:
+            return self.data_model.objects.using('datastore')
+
+        return None
+
+    @property
     def service_type(self):
         if self.storeType == 'coverageStore':
             return "WCS"
         if self.storeType == 'dataStore':
             return "WFS"
 
-    def get_base_file(self):
-        base_exts = [x.replace('.','') for x in cov_exts + vec_exts]
-        base_files = self.layerfile_set.filter(name__in=base_exts)
+    @property
+    def ows_url(self):
+        if self.storeType == "remoteStore" and "geonode.contrib.services" in settings.INSTALLED_APPS:
+            from geonode.contrib.services.models import ServiceLayer
+            return ServiceLayer.objects.filter(layer__id=self.id)[0].service.base_url
+        else:
+            return settings.OGC_SERVER['default']['LOCATION'] + "wms"
 
+    def get_base_file(self):
+        """Get the shp or geotiff file for this layer.
+        """
+        # If there was no upload_session return None
+        if self.upload_session is None:
+            return None
+
+        base_exts = [x.replace('.','') for x in cov_exts + vec_exts]
+        base_files = self.upload_session.layerfile_set.filter(name__in=base_exts)
         base_files_count = base_files.count()
 
+        # If there are no files in the upload_session return None
         if base_files_count == 0:
             return None
 
@@ -132,6 +152,7 @@ class Layer(ResourceBase):
 
     def get_absolute_url(self):
         return reverse('layer_detail', args=(self.typename,))
+
 
     def attribute_config(self):
         #Get custom attribute sort order and labels if any
@@ -165,7 +186,6 @@ class Layer(ResourceBase):
     LEVEL_WRITE = 'layer_readwrite'
     LEVEL_ADMIN = 'layer_admin'
 
-
     def maps(self):
         from geonode.maps.models import MapLayer
         return  MapLayer.objects.filter(name=self.typename)
@@ -196,7 +216,6 @@ class LayerFile(models.Model):
     """Helper class to store original files.
     """
     upload_session = models.ForeignKey(UploadSession)
-    layer = models.ForeignKey(Layer, blank=True, null=True)
     name = models.CharField(max_length=255)
     base = models.BooleanField(default=False)
     file = models.FileField(upload_to='layers', max_length=255)
@@ -267,28 +286,40 @@ def pre_save_layer(instance, sender, **kwargs):
     if instance.uuid == '':
         instance.uuid = str(uuid.uuid1())
 
-    xml_files = instance.layerfile_set.filter(name='xml')
+    if instance.typename is None:
+        # Set a sensible default for the typename
+        instance.typename = 'geonode:%s' % instance.name
 
-    # Set a sensible default for the typename
-    instance.typename = 'geonode:%s' % instance.name
+    base_file = instance.get_base_file()
 
-    # If an XML metadata document is uploaded,
-    # parse the XML metadata and update uuid and URLs as per the content model
-    if xml_files.count() > 0:
-        logger.info('Processing uploaded XML metadata')
-        instance.metadata_uploaded   = True
-        # get model properties from XML
-        vals, keywords = set_metadata(xml_files[0].file.read())
+    if base_file is not None:
+        extension = '.%s' % base_file.name
+        if extension in vec_exts:
+            instance.storeType = 'dataStore'
+        elif extension in cov_exts:
+            instance.storeType = 'coverageStore'
 
-        # set model properties
-        for key, value in vals.items():
-            if key == 'spatial_representation_type':
-                value = SpatialRepresentationType(identifier=value)
-            elif key == 'topic_category':
-                category, created = TopicCategory.objects.get_or_create(identifier=value.lower(), gn_description=value)
-                instance.category = category
-            else:
-                setattr(instance, key, value)
+    # Set sane defaults for None in bbox fields.
+    if instance.bbox_x0 is None:
+        instance.bbox_x0 = -180
+
+    if instance.bbox_x1 is None:
+        instance.bbox_x1 = 180
+
+    if instance.bbox_y0 is None:
+        instance.bbox_y0 = -90
+
+    if instance.bbox_y1 is None:
+        instance.bbox_y1 = 90
+
+    bbox = [instance.bbox_x0, instance.bbox_x1, instance.bbox_y0, instance.bbox_y1]
+
+    instance.set_bounds_from_bbox(bbox)
+
+    try:
+        instance.thumbnail, created = Thumbnail.objects.get_or_create(resourcebase__id=instance.id)
+    except MultipleObjectsReturned:
+        instance.thumbnail = Thumbnail.objects.filter(resourcebase__id=instance.id)[0]
 
 
 def pre_delete_layer(instance, sender, **kwargs):
@@ -319,23 +350,11 @@ def post_delete_layer(instance, sender, **kwargs):
         instance.default_style.delete()
 
 
-def post_save_layer(instance, sender, **kwards):
+def post_save_layer(instance, sender, **kwargs):
     """Set missing default values.
     """
     instance.set_missing_info()
 
-    xml_files = instance.layerfile_set.filter(name='xml')
-
-    # If an XML metadata document is uploaded,
-    # parse the XML metadata and update uuid and URLs as per the content model
-    if xml_files.count() > 0:
-        logger.info('Processing uploaded XML metadata')
-        instance.metadata_uploaded   = True
-        # get model properties from XML
-        vals, keywords = set_metadata(xml_files[0].file.read())
-
-        # add keywords
-        instance.keywords.add(*keywords)
 
 signals.pre_save.connect(pre_save_layer, sender=Layer)
 signals.post_save.connect(post_save_layer, sender=Layer)

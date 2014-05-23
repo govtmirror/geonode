@@ -153,6 +153,7 @@ ALLOWED_DOCUMENT_TYPES = [
 ]
 MAX_DOCUMENT_SIZE = 2 # MB
 
+
 GEONODE_APPS = (
     # GeoNode internal apps
     'geonode.people',
@@ -161,18 +162,22 @@ GEONODE_APPS = (
     'geonode.maps',
     'geonode.proxy',
     'geonode.security',
-    'geonode.search',
     'geonode.social',
     'geonode.catalogue',
     'geonode.documents',
     'geonode.announcements',
-
-    # GeoServer Apps
-    'geonode.geoserver',
-    'geonode.upload',
+    'geonode.api',
 
     # GeoNode Contrib Apps
+    'geonode.contrib.services',
     'geonode.contrib.groups',
+    #'geonode.contrib.dynamic',
+    
+    # GeoServer Apps
+    # Geoserver needs to come last because
+    # it's signals may rely on other apps' signals.
+    'geonode.geoserver',
+    'geonode.upload',
 )
 
 INSTALLED_APPS = (
@@ -187,6 +192,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.messages',
     'django.contrib.humanize',
+    'django.contrib.gis',
 
     # Third party apps
 
@@ -194,9 +200,9 @@ INSTALLED_APPS = (
     'pagination',
     'taggit',
     'taggit_templatetags',
-    'south',
     'friendlytagloader',
     'geoexplorer',
+    'leaflet',
     'django_extensions',
     #'haystack',
 
@@ -268,10 +274,6 @@ LOGGING = {
             "level": "ERROR",
         },
         "pycsw": {
-            "handlers": ["console"],
-            "level": "ERROR",
-        },
-        'south': {
             "handlers": ["console"],
             "level": "ERROR",
         },
@@ -354,18 +356,12 @@ AGON_RATINGS_CATEGORY_CHOICES = {
 
 # Activity Stream
 ACTSTREAM_SETTINGS = {
-    'MODELS': ('auth.user', 'layers.layer', 'maps.map', 'dialogos.comment', 'documents.document'),
+    'MODELS': ('auth.user', 'layers.layer', 'maps.map', 'dialogos.comment', 'documents.document', 'services.service'),
     'FETCH_RELATIONS': True,
     'USE_PREFETCH': False,
     'USE_JSONFIELD': True,
     'GFK_FETCH_DEPTH': 1,
 }
-
-# For South migrations
-SOUTH_MIGRATION_MODULES = {
-    'avatar': 'geonode.migrations.avatar',
-}
-SOUTH_TESTS_MIGRATE=False
 
 # Settings for Social Apps
 AUTH_PROFILE_MODULE = 'people.Profile'
@@ -394,6 +390,13 @@ NOSE_ARGS = [
 
 SITEURL = "http://localhost:8000/"
 
+USE_QUEUE = False
+
+DEFAULT_WORKSPACE = 'geonode'
+CASCADE_WORKSPACE = 'geonode'
+
+OGP_URL = "http://geodata.tufts.edu/solr/select"
+
 # Topic Categories list should not be modified (they are ISO). In case you 
 # absolutely need it set to True this variable
 MODIFY_TOPICCATEGORY = False
@@ -416,7 +419,7 @@ OGC_SERVER = {
         'USER' : 'admin',
         'PASSWORD' : 'geoserver',
         'MAPFISH_PRINT_ENABLED' : True,
-        'PRINTNG_ENABLED' : True,
+        'PRINT_NG_ENABLED' : True,
         'GEONODE_SECURITY_ENABLED' : True,
         'GEOGIT_ENABLED' : False,
         'WMST_ENABLED' : False,
@@ -563,6 +566,16 @@ if 'geonode.geoserver' in INSTALLED_APPS:
 
 SOCIAL_BUTTONS = True
 
+#Enable Licenses User Interface
+#Regardless of selection, license field stil exists as a field in the Resourcebase model.
+#Detail Display: above, below, never
+#Metadata Options: verbose, light, never
+LICENSES = {
+    'ENABLED': True,
+    'DETAIL': 'above',
+    'METADATA': 'verbose',
+}
+
 # Require users to authenticate before using Geonode
 LOCKDOWN_GEONODE = False
 
@@ -615,6 +628,23 @@ TASTYPIE_DEFAULT_FORMATS = ['json']
 
 # gravatar settings
 AUTO_GENERATE_AVATAR_SIZES = (20,32,80,100,140,200)
+
+# Number of results per page listed in the GeoNode search pages
+CLIENT_RESULTS_LIMIT = 100
+
+# Number of items returned by the apis 0 equals no limit
+API_LIMIT_PER_PAGE = 0
+
+LEAFLET_CONFIG = {
+'TILES': [
+    # Find tiles at:
+    # http://leaflet-extras.github.io/leaflet-providers/preview/
+
+    # Stamen toner lite.
+    ('Watercolor', 'http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.png', 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'),
+    ('Toner Lite', 'http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png', 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'),
+]
+}
 
 # Load more settings from a file called local_settings.py if it exists
 try:

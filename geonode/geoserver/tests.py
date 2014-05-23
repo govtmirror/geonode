@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from django.test.client import Client
 from django.test.utils import override_settings
 from geonode.geoserver.helpers import OGC_Servers_Handler
-from geonode.search.populate_search_test_data import create_models
+from geonode.base.populate_test_data import create_models
 from geonode.layers.populate_layers_data import create_layer_data
 from geonode.layers.models import Layer
 
@@ -184,7 +184,7 @@ class UtilsTests(TestCase):
                     'USER': 'admin',
                     'PASSWORD': 'geoserver',
                     'MAPFISH_PRINT_ENABLED': True,
-                    'PRINTING_ENABLED': True,
+                    'PRINT_NG_ENABLED': True,
                     'GEONODE_SECURITY_ENABLED': True,
                     'GEOGIT_ENABLED': False,
                     'WMST_ENABLED': False,
@@ -221,7 +221,7 @@ class UtilsTests(TestCase):
             self.assertEqual(ogc_settings.DATASTORE, str())
             self.assertEqual(ogc_settings.credentials, ('admin', 'geoserver'))
             self.assertTrue(ogc_settings.MAPFISH_PRINT_ENABLED)
-            self.assertTrue(ogc_settings.PRINTING_ENABLED)
+            self.assertTrue(ogc_settings.PRINT_NG_ENABLED)
             self.assertTrue(ogc_settings.GEONODE_SECURITY_ENABLED)
             self.assertFalse(ogc_settings.GEOGIT_ENABLED)
             self.assertFalse(ogc_settings.WMST_ENABLED)

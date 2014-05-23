@@ -1065,6 +1065,10 @@ class OGC_Servers_Handler(object):
         if uploader_backend == 'geonode.importer' and not datastore:
             raise ImproperlyConfigured('The UPLOADER BACKEND is set to geonode.importer but no DATASTORE is specified.')
 
+        if server.has_key('PRINTNG_ENABLED'):
+            server.set('PRINT_NG_ENABLED', server.get('PRINTNG_ENABLED'))
+            logger.info("Using PRINTNG_ENABLED setting, please update to PRINT_NG_ENABLED [%s]", name)
+
 
     def ensure_defaults(self, alias):
         """
@@ -1082,7 +1086,7 @@ class OGC_Servers_Handler(object):
         server.setdefault('DATASTORE', str())
         server.setdefault('GEOGIT_DATASTORE_DIR', str())
 
-        for option in ['MAPFISH_PRINT_ENABLED', 'PRINTING_ENABLED', 'GEONODE_SECURITY_ENABLED', 'BACKEND_WRITE_ENABLED']:
+        for option in ['MAPFISH_PRINT_ENABLED', 'PRINT_NG_ENABLED', 'GEONODE_SECURITY_ENABLED', 'BACKEND_WRITE_ENABLED']:
             server.setdefault(option, True)
 
         for option in ['GEOGIT_ENABLED', 'WMST_ENABLED', 'WPS_ENABLED']:
@@ -1189,10 +1193,10 @@ def style_update(request, url):
     In case of a DELETE, we need to query request.path to get the style name,
     and then remove it.
     In case of a POST or PUT, we need to parse the xml from
-    request.raw_post_data, which is in this format:
+    request.body, which is in this format:
     """
     if request.method in ('POST', 'PUT'): # we need to parse xml
-        tree = ET.ElementTree(ET.fromstring(request.raw_post_data))
+        tree = ET.ElementTree(ET.fromstring(request.body))
         elm_namedlayer_name=tree.findall('.//{http://www.opengis.net/sld}Name')[0]
         elm_user_style_name=tree.findall('.//{http://www.opengis.net/sld}Name')[1]
         elm_user_style_title=tree.find('.//{http://www.opengis.net/sld}Title')
@@ -1200,7 +1204,7 @@ def style_update(request, url):
             elm_user_style_title = elm_user_style_name
         layer_name=elm_namedlayer_name.text
         style_name=elm_user_style_name.text
-        sld_body='<?xml version="1.0" encoding="UTF-8"?>%s' % request.raw_post_data
+        sld_body='<?xml version="1.0" encoding="UTF-8"?>%s' % request.body
         if request.method == 'POST': # add style in GN and associate it to layer
             style = Style(name=style_name, sld_body=sld_body, sld_url=url)
             style.save()
