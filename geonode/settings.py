@@ -203,6 +203,7 @@ GEONODE_APPS = (
     'geonode.api',
     'geonode.groups',
     'geonode.services',
+    'geonode.timezones',
 
     # GeoNode Contrib Apps
 
@@ -320,7 +321,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
 
-MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + ('geonode.middleware.TimezoneMiddleware',)
+MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + ('geonode.timezones.middleware.TimezoneMiddleware',)
 
 
 

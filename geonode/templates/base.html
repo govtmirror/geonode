@@ -179,7 +179,7 @@
           </div>
           <div class="col-md-4 pull-right" style="width:15%;">
             <label>{% trans "Time Zone" %}</label>
-            <form class="form-inline" action="/tz/settimezone/" method="post">
+            <form class="form-inline" action="/timezones/set/" method="post">
               {% csrf_token %}
               <select name="timezone" onchange="javascript:form.submit()">
                 {% for tz in TIMEZONES %}
