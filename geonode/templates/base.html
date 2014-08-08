@@ -177,12 +177,31 @@
             <a href="{% url "developer" %}">{% trans "Developers" %}</a> |
             <a href="{% url "about" %}">{% trans "About" %}</a>
           </div>
-          <div class="col-md-4 pull-right">
+          <div class="col-md-4 pull-right" style="width:15%;">
+            <label>{% trans "Time Zone" %}</label>
+            <form class="form-inline" action="/tz/settimezone/" method="post">
+              {% csrf_token %}
+              <select name="timezone" onchange="javascript:form.submit()">
+                {% for tz in TIMEZONES %}
+                  {% if request.session.tz_code == None %}
+                  <option value="{{ tz.0 }}" {% ifequal TIME_ZONE tz.0 %} selected="selected"{% endifequal %}>
+                    {{ tz.1 }}
+                  </option>
+                  {% else %}
+                  <option value="{{ tz.0 }}" {% ifequal request.session.tz_code tz.0 %} selected="selected"{% endifequal %}>
+                    {{ tz.1 }}
+                  </option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+            </form>
+          </div>
+          <div class="col-md-4 pull-right" style="width:18%;">
             <label>{% trans "Language" %}</label>
             {% if csrf_token != "NOTPROVIDED" %}
             {% get_current_language as LANGUAGE %}
             <form class="form-inline" action="/i18n/setlang/" method="post">
-            {% csrf_token %}
+              {% csrf_token %}
               <select name="language" onchange="javascript:form.submit()">
                 {% for lang in LANGUAGES %}
                 <option value="{{ lang.0 }}" {% ifequal LANGUAGE_CODE lang.0 %} selected="selected"{% endifequal %}>

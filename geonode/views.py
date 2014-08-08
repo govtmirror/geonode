@@ -24,7 +24,8 @@ from django.core.urlresolvers import reverse
 from django.utils import simplejson as json
 from django.db.models import Q
 from geonode.groups.models import GroupProfile
-
+from django.shortcuts import redirect, render
+from django.utils.http import is_safe_url
 
 class AjaxLoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
@@ -99,3 +100,37 @@ def err403(request):
         reverse('account_login') +
         '?next=' +
         request.get_full_path())
+
+#def set_timezone(request):
+#    if request.method == 'POST':
+#        request.session['django_timezone'] = request.POST['timezone']
+#        return redirect('/')
+#    else:
+#        return render(request, 'template.html', {'timezones': pytz.common_timezones})
+
+def set_timezone(request):
+    """
+    Redirect to a given url while setting the chosen timezone in the
+    session or cookie. The url and the timezone code need to be
+    specified in the request parameters.
+
+    Since this view changes how the user will see the rest of the site, it must
+    only be accessed as a POST request. If called as a GET request, it will
+    redirect to the page in the request (the 'next' parameter) without changing
+    any state.
+    """
+    next = request.POST.get('next', request.GET.get('next'))
+    if not is_safe_url(url=next, host=request.get_host()):
+        next = request.META.get('HTTP_REFERER')
+        if not is_safe_url(url=next, host=request.get_host()):
+            next = '/'
+    response = HttpResponseRedirect(next)
+    if request.method == 'POST':
+        tz_code = request.POST.get('timezone', None)
+        if tz_code:
+        #if tz_code and check_for_language(tz_code):
+            if hasattr(request, 'session'):
+                request.session['tz_code'] = tz_code
+            else:
+                response.set_cookie('tz-code', tz_code, )
+    return response

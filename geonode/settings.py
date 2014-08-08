@@ -320,6 +320,9 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
 
+MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + ('geonode.middleware.TimezoneMiddleware',)
+
+
 
 # Replacement of default authentication backend in order to support
 # permissions per object.

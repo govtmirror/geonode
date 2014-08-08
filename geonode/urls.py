@@ -47,6 +47,9 @@ sitemaps = {
 
 urlpatterns = patterns('',
 
+                       #Time Zone Endpoints
+                       url(r'^tz/settimezone/$', 'geonode.views.set_timezone', name='set_timezone'),
+
                        # Static pages
                        url(r'^/?$',
                            TemplateView.as_view(template_name='index.html'),
