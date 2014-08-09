@@ -309,6 +309,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'geonode.geoserver.context_processors.geoserver_urls',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = TEMPLATE_CONTEXT_PROCESSORS + ('geonode.timezones.context_processors.timezones',)
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

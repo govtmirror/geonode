@@ -27,6 +27,10 @@ from geonode.groups.models import GroupProfile
 from django.shortcuts import redirect, render
 from django.utils.http import is_safe_url
 
+import pytz
+
+from .utils import check_for_timezone
+
 #def set_timezone(request):
 #    if request.method == 'POST':
 #        request.session['django_timezone'] = request.POST['timezone']
@@ -53,10 +57,9 @@ def set_timezone(request):
     response = HttpResponseRedirect(next)
     if request.method == 'POST':
         tz_code = request.POST.get('timezone', None)
-        if tz_code:
-        #if tz_code and check_for_language(tz_code):
+        if tz_code and check_for_timezone(tz_code):
             if hasattr(request, 'session'):
                 request.session['tz_code'] = tz_code
             else:
-                response.set_cookie('tz-code', tz_code, )
+                response.set_cookie('tz_code', tz_code, )
     return response
