@@ -32,7 +32,7 @@
     {% astimezone resource.date TIME_ZONE as date_server %}
     <dd>{{ date_user }} <a href="#date-more" data-toggle="collapse" data-target=".date-more"><i class="fa fa-info-circle"></i></a></dd></dd>
     {% endif %}
-    <div class="date-more collapse">
+    <dd class="date-more collapse">
       <b> Date in Different Timezones </b>
       <br>
       + UTC: {{ resource.date }}
@@ -40,7 +40,7 @@
       + {{ TZ_CODE }} (Current): {{ date_user }}
       <br>
       + {{ TIME_ZONE }} (Server): {{ date_server }}
-    </div>
+    </dd>
 
     {% if resource.display_type %}
     <dt>{% trans "Type" %}</dt>
