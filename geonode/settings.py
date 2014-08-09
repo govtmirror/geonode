@@ -66,6 +66,15 @@ DATABASES = {
 # system time zone.
 TIME_ZONE = 'America/Chicago'
 
+#  Select which time zones will be added to the dropdown
+#  Fallbacks to all of them if not set
+#TIME_ZONES = (
+#    ('America/Chicago', 'America/Chicago'),
+#    ('America/New_York', 'America/New_York'),
+#    ('UTC', 'UTC'),
+#    ('Europe/Rome', 'Europe/Rome'),
+#)
+
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en'

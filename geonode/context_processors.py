@@ -26,6 +26,7 @@ import pytz
 
 def resource_urls(request):
     """Global values to pass to templates"""
+    timezones_all = list(zip(pytz.all_timezones, pytz.all_timezones))
     site = Site.objects.get_current()
     defaults = dict(
         STATIC_URL=settings.STATIC_URL,
@@ -34,7 +35,11 @@ def resource_urls(request):
         VERSION=get_version(),
         SITE_NAME=site.name,
         SITE_DOMAIN=site.domain,
-        TIMEZONES=list(zip(pytz.all_timezones, pytz.all_timezones)),
+        TIMEZONES_ALL=timezones_all,
+        TIMEZONES=getattr(
+            settings,
+            'TIME_ZONES',
+            timezones_all),
         DEBUG_STATIC=getattr(
             settings,
             "DEBUG_STATIC",
