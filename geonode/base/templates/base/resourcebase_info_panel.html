@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load timezone_tags %}
 
 <article class="description tab-pane active" id="info">
   <dl class="dl-horizontal">
@@ -13,7 +14,7 @@
     {% endif %}
     <div class="license-more collapse">
       {% for bullet in resource.license.description_bullets %}
-        {{ bullet }}
+        {{ bullet }} <br></br>
       {% endfor %}
       {% if resource.license.url %}
         + For more info see <a href="{{ resource.license.url }}">{{ resource.license.url }}</a>.
@@ -27,8 +28,19 @@
     
     {% if resource.date %}
     <dt>{% trans resource.date_type|title %} {% trans "Date" %}</dt>
-    <dd>{{ resource.date }}</dd>
+    {% astimezone resource.date TZ_CODE as date_user %}
+    {% astimezone resource.date TIME_ZONE as date_server %}
+    <dd>{{ date_user }} <a href="#date-more" data-toggle="collapse" data-target=".date-more"><i class="fa fa-info-circle"></i></a></dd></dd>
     {% endif %}
+    <div class="date-more collapse">
+      <b> Date in Different Timezones </b>
+      <br>
+      + UTC: {{ resource.date }}
+      <br>
+      + {{ TZ_CODE }} (Current): {{ date_user }}
+      <br>
+      + {{ TIME_ZONE }} (Server): {{ date_server }}
+    </div>
 
     {% if resource.display_type %}
     <dt>{% trans "Type" %}</dt>
@@ -76,7 +88,7 @@
     <dd>{{ resource.license.name_long }} <a href="#license-more" data-toggle="collapse" data-target=".license-more"><i class="fa fa-info-circle"></i></a></dd>
       <div class="license-more collapse">
         {% for bullet in resource.license.description_bullets %}
-          {{ bullet }}<br/><br/>
+          {{ bullet }}</br>
         {% endfor %}
         {% if resource.license.url %}
           + For more info see <a href="{{ resource.license.url }}">{{ resource.license.url }}</a>.
