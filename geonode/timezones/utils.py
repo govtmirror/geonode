@@ -55,3 +55,10 @@ def check_for_timezone(tz_code):
         if tz_code == code:
             return True
     return False
+
+def date_utc_to_timezone(datetime, tz_code):
+    datetime_utc = pytz.utc.localize(datetime)
+    tz = pytz.timezone(tz_code)
+    datetime_tz = tz.normalize(datetime_utc.astimezone(tz))
+    return datetime_tz
+
