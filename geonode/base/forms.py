@@ -29,9 +29,9 @@ class SplitDateTimeField_GN(forms.SplitDateTimeField):
     """
     The base datetime field used in GeoNode.  The Django field uses a different date format language
     than the Bootstrap datepicker.  Default is ISO 8601 Compliant.  For example, 1980-01-01.
-    See https://docs.djangoproject.com/en/dev/ref/templates/builtins/#date and 
+    See https://docs.djangoproject.com/en/dev/ref/templates/builtins/#date and
     http://bootstrap-datepicker.readthedocs.org/en/release/options.html#format
-    """    
+    """
 
     def __init__(self, required=False, input_date_formats=None, input_time_formats=None, *args, **kwargs):
         super(SplitDateTimeField_GN, self).__init__(
@@ -41,8 +41,8 @@ class SplitDateTimeField_GN(forms.SplitDateTimeField):
             *args,
             **kwargs)
         self.widget.widgets[0].attrs = {
-        "class": "datepicker",
-        'data-date-format': "yyyy-mm-dd"}
+            "class": "datepicker",
+            "data-date-format": "yyyy-mm-dd"}
         self.widget.widgets[1].attrs = {"class": "time"}
 
     def clean(self, value):

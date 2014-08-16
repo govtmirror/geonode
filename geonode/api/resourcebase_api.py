@@ -43,11 +43,9 @@ class CommonMetaApi:
                  'keywords': ALL_WITH_RELATIONS,
                  'category': ALL_WITH_RELATIONS,
                  'owner': ALL_WITH_RELATIONS,
-                 'date_creation': ALL,
-                 'date_publication': ALL,
-                 'date_revision': ALL,
+                 'date_sort': ALL,
                  }
-    ordering = ['date_creation', 'date_publication', 'date_revision', 'title', 'popular_count']
+    ordering = ['date_sort', 'title', 'popular_count']
     max_limit = None
 
 
@@ -450,7 +448,7 @@ class ResourceBaseResource(CommonModelApi):
 
     class Meta(CommonMetaApi):
         queryset = ResourceBase.objects.polymorphic_queryset() \
-            .distinct().order_by('-date_revision','-date_publication','-date_creation')
+            .distinct().order_by('-date_sort')
         resource_name = 'base'
         excludes = ['csw_anytext', 'metadata_xml']
 
@@ -460,7 +458,7 @@ class FeaturedResourceBaseResource(CommonModelApi):
     """Only the featured resourcebases"""
 
     class Meta(CommonMetaApi):
-        queryset = ResourceBase.objects.filter(featured=True).order_by('-date_revision','-date_publication','-date_creation')
+        queryset = ResourceBase.objects.filter(featured=True).order_by('-date_sort')
         resource_name = 'featured'
 
 
@@ -469,7 +467,7 @@ class LayerResource(CommonModelApi):
     """Layer API"""
 
     class Meta(CommonMetaApi):
-        queryset = Layer.objects.distinct().order_by('-date_revision','-date_publication','-date_creation')
+        queryset = Layer.objects.distinct().order_by('-date_sort')
         resource_name = 'layers'
         excludes = ['csw_anytext', 'metadata_xml']
 
@@ -479,7 +477,7 @@ class MapResource(CommonModelApi):
     """Map API"""
 
     class Meta(CommonMetaApi):
-        queryset = Map.objects.distinct().order_by('-date_revision','-date_publication','-date_creation')
+        queryset = Map.objects.distinct().order_by('-date_sort')
         resource_name = 'maps'
 
 
@@ -488,5 +486,5 @@ class DocumentResource(CommonModelApi):
     """Document API"""
 
     class Meta(CommonMetaApi):
-        queryset = Document.objects.distinct().order_by('-date_revision','-date_publication','-date_creation')
+        queryset = Document.objects.distinct().order_by('-date_sort')
         resource_name = 'documents'

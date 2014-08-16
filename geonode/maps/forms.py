@@ -101,7 +101,8 @@ class MapForm(TranslationModelForm):
             'csw_anytext',
             'popular_count',
             'share_count',
-            'thumbnail')
+            'thumbnail',
+            'date_sort')
         widgets = autocomplete_light.get_widgets_dict(Map)
         widgets['abstract'] = forms.Textarea(attrs={'cols': 40, 'rows': 10})
 

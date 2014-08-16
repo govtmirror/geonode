@@ -236,10 +236,6 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin):
     Base Resource Object loosely based on ISO 19115:2003
     """
 
-    VALID_DATE_TYPES = [(x.lower(), _(x)) for x in ['Creation', 'Publication', 'Revision']]
-
-    #date_help_text = _('reference date for the cited resource')
-    #date_type_help_text = _('identification of when a given event occurred')
     date_creation_help_text = _('when the resource was brought into existence')
     date_publication_help_text = _('when the resource was initially published')
     date_revision_help_text = _('when the resource was last modified')
@@ -271,14 +267,13 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, related_name='owned_resource')
     contacts = models.ManyToManyField(settings.AUTH_USER_MODEL, through='ContactRole')
     title = models.CharField(_('title'), max_length=255, help_text=_('name by which the cited resource is known'))
-    #==#
-    #date = models.DateTimeField(_('date'), default=datetime.datetime.now, help_text=date_help_text)
-    #date_type = models.CharField(_('date type'), max_length=255, choices=VALID_DATE_TYPES, default='publication',
-    #                             help_text=date_type_help_text)
-    date_creation = models.DateTimeField(_('date created'),  blank=True, null=True, default=datetime.datetime.now, help_text=date_creation_help_text)
-    date_publication = models.DateTimeField(_('date published'), blank=True, null=True, default=datetime.datetime.now, help_text=date_publication_help_text)
-    date_revision = models.DateTimeField(_('date modified'), blank=True, null=True, default=datetime.datetime.now, help_text=date_revision_help_text)
-    #==#
+    date_creation = models.DateTimeField(_('date created'),  blank=True, null=True,
+                                         default=datetime.datetime.now, help_text=date_creation_help_text)
+    date_publication = models.DateTimeField(_('date published'), blank=True, null=True,
+                                           default=datetime.datetime.now, help_text=date_publication_help_text)
+    date_revision = models.DateTimeField(_('date modified'), blank=True, null=True,
+                                         default=datetime.datetime.now, help_text=date_revision_help_text)
+    date_sort = models.DateTimeField(_('date sort'), blank=True, null=True, default=None)
     edition = models.CharField(_('edition'), max_length=255, blank=True, null=True, help_text=edition_help_text)
     abstract = models.TextField(_('abstract'), blank=True, help_text=abstract_help_text)
     purpose = models.TextField(_('purpose'), null=True, blank=True, help_text=purpose_help_text)
@@ -378,8 +373,7 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin):
     def __unicode__(self):
         return self.title
 
-    @property
-    def date_sort(self):
+    def get_sort_date(self):
         return self.date_revision or self.date_publication or self.date_creation
 
     @property
@@ -700,7 +694,8 @@ def resourcebase_post_save(instance, *args, **kwargs):
     """
     ResourceBase.objects.filter(id=instance.id).update(
         thumbnail_url=instance.get_thumbnail_url(),
-        detail_url=instance.get_absolute_url())
+        detail_url=instance.get_absolute_url(),
+        date_sort=instance.get_date_sort())
     instance.set_missing_info()
 
 

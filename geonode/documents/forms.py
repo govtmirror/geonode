@@ -141,7 +141,8 @@ class DocumentForm(TranslationModelForm):
             'popular_count',
             'share_count',
             'thumbnail',
-            'doc_url')
+            'doc_url',
+            'date_sort')
 
 
 class DocumentDescriptionForm(forms.Form):
