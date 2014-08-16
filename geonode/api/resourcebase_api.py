@@ -43,9 +43,11 @@ class CommonMetaApi:
                  'keywords': ALL_WITH_RELATIONS,
                  'category': ALL_WITH_RELATIONS,
                  'owner': ALL_WITH_RELATIONS,
-                 'date': ALL,
+                 'date_creation': ALL,
+                 'date_publication': ALL,
+                 'date_revision': ALL,
                  }
-    ordering = ['date', 'title', 'popular_count']
+    ordering = ['date_creation', 'date_publication', 'date_revision', 'title', 'popular_count']
     max_limit = None
 
 
@@ -257,12 +259,12 @@ class CommonModelApi(ModelResource):
                         bbox_right__lte=left))
 
         # Apply sort
-        if sort.lower() == "-date":
+        if sort.lower() == "-date_sort":
             sqs = (
-                SearchQuerySet() if sqs is None else sqs).order_by("-modified")
-        elif sort.lower() == "date":
+                SearchQuerySet() if sqs is None else sqs).order_by("-date_sort")
+        elif sort.lower() == "date_sort":
             sqs = (
-                SearchQuerySet() if sqs is None else sqs).order_by("modified")
+                SearchQuerySet() if sqs is None else sqs).order_by("date_sort")
         elif sort.lower() == "title":
             sqs = (SearchQuerySet() if sqs is None else sqs).order_by(
                 "title_sortable")
@@ -274,7 +276,7 @@ class CommonModelApi(ModelResource):
                 "-popular_count")
         else:
             sqs = (
-                SearchQuerySet() if sqs is None else sqs).order_by("-modified")
+                SearchQuerySet() if sqs is None else sqs).order_by("-date_sort")
 
         return sqs
 
@@ -448,7 +450,7 @@ class ResourceBaseResource(CommonModelApi):
 
     class Meta(CommonMetaApi):
         queryset = ResourceBase.objects.polymorphic_queryset() \
-            .distinct().order_by('-date')
+            .distinct().order_by('-date_revision','-date_publication','-date_creation')
         resource_name = 'base'
         excludes = ['csw_anytext', 'metadata_xml']
 
@@ -458,7 +460,7 @@ class FeaturedResourceBaseResource(CommonModelApi):
     """Only the featured resourcebases"""
 
     class Meta(CommonMetaApi):
-        queryset = ResourceBase.objects.filter(featured=True).order_by('-date')
+        queryset = ResourceBase.objects.filter(featured=True).order_by('-date_revision','-date_publication','-date_creation')
         resource_name = 'featured'
 
 
@@ -467,24 +469,24 @@ class LayerResource(CommonModelApi):
     """Layer API"""
 
     class Meta(CommonMetaApi):
-        queryset = Layer.objects.distinct().order_by('-date')
+        queryset = Layer.objects.distinct().order_by('-date_revision','-date_publication','-date_creation')
         resource_name = 'layers'
         excludes = ['csw_anytext', 'metadata_xml']
 
 
 class MapResource(CommonModelApi):
 
-    """Maps API"""
+    """Map API"""
 
     class Meta(CommonMetaApi):
-        queryset = Map.objects.distinct().order_by('-date')
+        queryset = Map.objects.distinct().order_by('-date_revision','-date_publication','-date_creation')
         resource_name = 'maps'
 
 
 class DocumentResource(CommonModelApi):
 
-    """Maps API"""
+    """Document API"""
 
     class Meta(CommonMetaApi):
-        queryset = Document.objects.distinct().order_by('-date')
+        queryset = Document.objects.distinct().order_by('-date_revision','-date_publication','-date_creation')
         resource_name = 'documents'

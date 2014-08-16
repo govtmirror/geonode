@@ -275,9 +275,9 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin):
     #date = models.DateTimeField(_('date'), default=datetime.datetime.now, help_text=date_help_text)
     #date_type = models.CharField(_('date type'), max_length=255, choices=VALID_DATE_TYPES, default='publication',
     #                             help_text=date_type_help_text)
-    date_creation = models.DateTimeField(_('date created'), default=datetime.datetime.now, help_text=date_creation_help_text)
-    date_publication = models.DateTimeField(_('date published'), default=datetime.datetime.now, help_text=date_publication_help_text)
-    date_revision = models.DateTimeField(_('date modified'), default=datetime.datetime.now, help_text=date_revision_help_text)
+    date_creation = models.DateTimeField(_('date created'),  blank=True, null=True, default=datetime.datetime.now, help_text=date_creation_help_text)
+    date_publication = models.DateTimeField(_('date published'), blank=True, null=True, default=datetime.datetime.now, help_text=date_publication_help_text)
+    date_revision = models.DateTimeField(_('date modified'), blank=True, null=True, default=datetime.datetime.now, help_text=date_revision_help_text)
     #==#
     edition = models.CharField(_('edition'), max_length=255, blank=True, null=True, help_text=edition_help_text)
     abstract = models.TextField(_('abstract'), blank=True, help_text=abstract_help_text)
@@ -377,6 +377,10 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin):
 
     def __unicode__(self):
         return self.title
+
+    @property
+    def date_sort(self):
+        return self.date_revision or self.date_publication or self.date_creation
 
     @property
     def bbox(self):

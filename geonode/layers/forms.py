@@ -29,6 +29,7 @@ from modeltranslation.forms import TranslationModelForm
 
 from mptt.forms import TreeNodeMultipleChoiceField
 
+from geonode.base.forms import SplitDateTimeField_GN
 from geonode.layers.models import Layer, Attribute
 from geonode.people.models import Profile
 from geonode.base.models import Region
@@ -47,21 +48,9 @@ class JSONField(forms.CharField):
 
 
 class LayerForm(TranslationModelForm):
-    date_creation = forms.DateTimeField(widget=forms.SplitDateTimeWidget)
-    date_creation.widget.widgets[0].attrs = {
-        "class": "datepicker",
-        'data-date-format': "yyyy-mm-dd"}
-    date_creation.widget.widgets[1].attrs = {"class": "time"}
-    date_publication = forms.DateTimeField(widget=forms.SplitDateTimeWidget)
-    date_publication.widget.widgets[0].attrs = {
-        "class": "datepicker",
-        'data-date-format': "yyyy-mm-dd"}
-    date_publication.widget.widgets[1].attrs = {"class": "time"}
-    date_revision = forms.DateTimeField(widget=forms.SplitDateTimeWidget)
-    date_revision.widget.widgets[0].attrs = {
-        "class": "datepicker",
-        'data-date-format': "yyyy-mm-dd"}
-    date_revision.widget.widgets[1].attrs = {"class": "time"}
+    date_creation = SplitDateTimeField_GN(label=_("Date Created"))
+    date_publication = SplitDateTimeField_GN(label=_("Date Published"))
+    date_revision = SplitDateTimeField_GN(label=_("Date Last Revised"))
     temporal_extent_start = forms.DateField(
         required=False,
         widget=forms.DateInput(
