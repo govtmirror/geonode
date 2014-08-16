@@ -270,7 +270,7 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin):
     date_creation = models.DateTimeField(_('date created'),  blank=True, null=True,
                                          default=datetime.datetime.now, help_text=date_creation_help_text)
     date_publication = models.DateTimeField(_('date published'), blank=True, null=True,
-                                           default=datetime.datetime.now, help_text=date_publication_help_text)
+                                            default=datetime.datetime.now, help_text=date_publication_help_text)
     date_revision = models.DateTimeField(_('date revised'), blank=True, null=True,
                                          default=datetime.datetime.now, help_text=date_revision_help_text)
     date_sort = models.DateTimeField(_('date sort'), blank=True, null=True, default=None)
