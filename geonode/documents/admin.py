@@ -6,11 +6,11 @@ import autocomplete_light
 
 
 class DocumentAdmin(MediaTranslationAdmin):
-    list_display = ('id', 'title', 'date', 'category')
+    list_display = ('id', 'title', 'date_creation', 'date_publication', 'date_revision', 'category')
     list_display_links = ('id',)
-    list_filter = ('date', 'date_type', 'restriction_code_type', 'category')
+    list_filter = ('date_creation', 'date_publication', 'date_revision', 'restriction_code_type', 'category')
     search_fields = ('title', 'abstract', 'purpose',)
-    date_hierarchy = 'date'
+    date_hierarchy = 'date_creation'
     form = autocomplete_light.modelform_factory(Document)
 
 admin.site.register(Document, DocumentAdmin)

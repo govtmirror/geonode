@@ -58,6 +58,12 @@ UPDATE_FREQUENCIES = (
     ('quarterly', _('data is updated every three months')),
 )
 
+DATE_TYPES = (
+    ('creation', _('date identifies when the resource was brought into existence')),
+    ('publication', _('date identifies when the resource was issued')),
+    ('revision', _('date identifies when the resource was examined or re-examined and improved or amended')),
+)
+
 CONTACT_FIELDS = [
     'name',
     'organization',

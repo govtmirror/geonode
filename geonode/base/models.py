@@ -238,8 +238,11 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin):
 
     VALID_DATE_TYPES = [(x.lower(), _(x)) for x in ['Creation', 'Publication', 'Revision']]
 
-    date_help_text = _('reference date for the cited resource')
-    date_type_help_text = _('identification of when a given event occurred')
+    #date_help_text = _('reference date for the cited resource')
+    #date_type_help_text = _('identification of when a given event occurred')
+    date_creation_help_text = _('when the resource was brought into existence')
+    date_publication_help_text = _('when the resource was initially published')
+    date_revision_help_text = _('when the resource was last modified')
     edition_help_text = _('version of the cited resource')
     abstract_help_text = _('brief narrative summary of the content of the resource(s)')
     purpose_help_text = _('summary of the intentions with which the resource(s) was developed')
@@ -268,9 +271,14 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, related_name='owned_resource')
     contacts = models.ManyToManyField(settings.AUTH_USER_MODEL, through='ContactRole')
     title = models.CharField(_('title'), max_length=255, help_text=_('name by which the cited resource is known'))
-    date = models.DateTimeField(_('date'), default=datetime.datetime.now, help_text=date_help_text)
-    date_type = models.CharField(_('date type'), max_length=255, choices=VALID_DATE_TYPES, default='publication',
-                                 help_text=date_type_help_text)
+    #==#
+    #date = models.DateTimeField(_('date'), default=datetime.datetime.now, help_text=date_help_text)
+    #date_type = models.CharField(_('date type'), max_length=255, choices=VALID_DATE_TYPES, default='publication',
+    #                             help_text=date_type_help_text)
+    date_creation = models.DateTimeField(_('date created'), default=datetime.datetime.now, help_text=date_creation_help_text)
+    date_publication = models.DateTimeField(_('date published'), default=datetime.datetime.now, help_text=date_publication_help_text)
+    date_revision = models.DateTimeField(_('date modified'), default=datetime.datetime.now, help_text=date_revision_help_text)
+    #==#
     edition = models.CharField(_('edition'), max_length=255, blank=True, null=True, help_text=edition_help_text)
     abstract = models.TextField(_('abstract'), blank=True, help_text=abstract_help_text)
     purpose = models.TextField(_('purpose'), null=True, blank=True, help_text=purpose_help_text)

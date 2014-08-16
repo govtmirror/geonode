@@ -34,11 +34,21 @@ import autocomplete_light
 
 
 class MapForm(TranslationModelForm):
-    date = forms.DateTimeField(widget=forms.SplitDateTimeWidget)
-    date.widget.widgets[0].attrs = {
+    date_creation = forms.DateTimeField(widget=forms.SplitDateTimeWidget)
+    date_creation.widget.widgets[0].attrs = {
         "class": "datepicker",
         'data-date-format': "yyyy-mm-dd"}
-    date.widget.widgets[1].attrs = {"class": "time"}
+    date_creation.widget.widgets[1].attrs = {"class": "time"}
+    date_publication = forms.DateTimeField(widget=forms.SplitDateTimeWidget)
+    date_publication.widget.widgets[0].attrs = {
+        "class": "datepicker",
+        'data-date-format': "yyyy-mm-dd"}
+    date_publication.widget.widgets[1].attrs = {"class": "time"}
+    date_revision = forms.DateTimeField(widget=forms.SplitDateTimeWidget)
+    date_revision.widget.widgets[0].attrs = {
+        "class": "datepicker",
+        'data-date-format': "yyyy-mm-dd"}
+    date_revision.widget.widgets[1].attrs = {"class": "time"}
     temporal_extent_start = forms.DateField(
         required=False,
         widget=forms.DateInput(

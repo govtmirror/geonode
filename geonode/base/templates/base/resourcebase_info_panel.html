@@ -25,9 +25,19 @@
     <dd>{{ resource.abstract|escape|urlize|linebreaks|safe|truncatechars:500 }}</dd>
     {% endif %}
     
-    {% if resource.date %}
-    <dt>{% trans resource.date_type|title %} {% trans "Date" %}</dt>
-    <dd>{{ resource.date }}</dd>
+    {% if resource.date_creation %}
+    <dt>{% trans "Date Created" %}</dt>
+    <dd>{{ resource.date_creation }}</dd>
+    {% endif %}
+
+    {% if resource.date_publication %}
+    <dt>{% trans "Date Published" %}</dt>
+    <dd>{{ resource.date_publication }}</dd>
+    {% endif %}
+
+    {% if resource.date_revision %}
+    <dt>{% trans "Date Last Revised" %}</dt>
+    <dd>{{ resource.date_revision }}</dd>
     {% endif %}
 
     {% if resource.display_type %}

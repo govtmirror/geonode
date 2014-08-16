@@ -37,15 +37,17 @@ class LayerAdmin(MediaTranslationAdmin):
         'typename',
         'service_type',
         'title',
-        'date',
+        'date_creation',
+        'date_publication',
+        'date_revision',
         'category')
     list_display_links = ('id',)
     list_editable = ('title', 'category')
     list_filter = ('owner', 'category',
-                   'restriction_code_type__identifier', 'date', 'date_type')
+                   'restriction_code_type__identifier', 'date_creation', 'date_publication', 'date_revision')
     search_fields = ('typename', 'title', 'abstract', 'purpose',)
     filter_horizontal = ('contacts',)
-    date_hierarchy = 'date'
+    date_hierarchy = 'date_creation'
     readonly_fields = ('uuid', 'typename', 'workspace')
     inlines = [AttributeInline]
     form = autocomplete_light.modelform_factory(Layer)
