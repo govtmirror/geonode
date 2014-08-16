@@ -271,7 +271,7 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin):
                                          default=datetime.datetime.now, help_text=date_creation_help_text)
     date_publication = models.DateTimeField(_('date published'), blank=True, null=True,
                                            default=datetime.datetime.now, help_text=date_publication_help_text)
-    date_revision = models.DateTimeField(_('date modified'), blank=True, null=True,
+    date_revision = models.DateTimeField(_('date revised'), blank=True, null=True,
                                          default=datetime.datetime.now, help_text=date_revision_help_text)
     date_sort = models.DateTimeField(_('date sort'), blank=True, null=True, default=None)
     edition = models.CharField(_('edition'), max_length=255, blank=True, null=True, help_text=edition_help_text)
@@ -373,7 +373,7 @@ class ResourceBase(PolymorphicModel, PermissionLevelMixin):
     def __unicode__(self):
         return self.title
 
-    def get_sort_date(self):
+    def get_date_sort(self):
         return self.date_revision or self.date_publication or self.date_creation
 
     @property

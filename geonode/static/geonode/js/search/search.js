@@ -314,27 +314,27 @@
     */
 
     $scope.date_query = {
-      'date_revision__gte': '',
-      'date_revision__lte': ''
+      'date_sort__gte': '',
+      'date_sort__lte': ''
     };
 
     $scope.$watch('date_query', function(){
-      if($scope.date_query.date__gte != '' && $scope.date_query.date__lte != ''){
-        $scope.query['date__range'] = $scope.date_query.date__gte + ',' + $scope.date_query.date__lte;
-        delete $scope.query['date_revision__gte'];
-        delete $scope.query['date_revision__lte'];
-      }else if ($scope.date_query.date__gte != ''){
-        $scope.query['date_revision__gte'] = $scope.date_query.date__gte;
-        delete $scope.query['date__range'];
-        delete $scope.query['date_revision__lte'];
-      }else if ($scope.date_query.date__lte != ''){
-        $scope.query['date_revision__lte'] = $scope.date_query.date__lte;
-        delete $scope.query['date__range'];
-        delete $scope.query['date_revision__gte'];
+      if($scope.date_query.date_sort__gte != '' && $scope.date_query.date_sort__lte != ''){
+        $scope.query['date_sort__range'] = $scope.date_query.date_sort__gte + ',' + $scope.date_query.date_sort__lte;
+        delete $scope.query['date_sort__gte'];
+        delete $scope.query['date_sort__lte'];
+      }else if ($scope.date_query.date_sort__gte != ''){
+        $scope.query['date_sort__gte'] = $scope.date_query.date__gte;
+        delete $scope.query['date_sort__range'];
+        delete $scope.query['date_sort__lte'];
+      }else if ($scope.date_query.date_sort__lte != ''){
+        $scope.query['date_sort__lte'] = $scope.date_query.date_sort__lte;
+        delete $scope.query['date_sort__range'];
+        delete $scope.query['date_sort__gte'];
       }else{
-        delete $scope.query['date__range'];
-        delete $scope.query['date_revision__gte'];
-        delete $scope.query['date_revision__lte'];
+        delete $scope.query['date_sort__range'];
+        delete $scope.query['date_sort__gte'];
+        delete $scope.query['date_sort__lte'];
       }
       query_api($scope.query);
     }, true);

@@ -131,7 +131,7 @@
                  <gco:DateTime>{{layer.date_publication|date:"Y-m-d\TH:i:s\Z"}}</gco:DateTime>
                </gmd:date>
                <gmd:dateType>
-                 <gmd:CI_DateTypeCode codeSpace="ISOTC211/19115" codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="ppublication">publication</gmd:CI_DateTypeCode>
+                 <gmd:CI_DateTypeCode codeSpace="ISOTC211/19115" codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication">publication</gmd:CI_DateTypeCode>
                </gmd:dateType>
              </gmd:CI_Date>
            </gmd:date>
