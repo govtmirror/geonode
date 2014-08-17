@@ -1,0 +1,32 @@
+{% extends "cybergis/cybergis_base.html" %}
+{% load i18n %}
+{% load bootstrap_tags %}
+
+{% block title %}{{ client.name }} — {{ block.super }}{% endblock %}
+
+{% block head %}
+  {% include "geonode/ext_header.html" %}
+  {{ block.super }}
+{% endblock %}
+
+{% block body_class %}data{% endblock %}
+
+{% block body_outer %}  
+<form class="form-horizontal" action="{% url "client_conf" client.id %}" method="POST">
+    <legend>
+      {% blocktrans with client.title as client_title %}
+        Configuring App {{ client_title }}
+      {% endblocktrans %}
+    </legend>
+    {% csrf_token %}
+    <div class="form-controls">
+      {{ client_form|as_bootstrap }}
+    </div>
+    <div class="form-actions">
+      <input type="submit" class="btn btn-primary" value="{% trans "Update" %}"/>
+    </div>
+  </form>
+{% endblock %}
+{% block extra_script %}
+{% include 'metadata_form_js.html' %}
+{% endblock %}

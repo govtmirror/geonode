@@ -176,6 +176,7 @@ GEONODE_APPS = (
     'geonode.api',
     'geonode.groups',
     'geonode.services',
+    'geonode.contrib.cybergis',
 
     # GeoNode Contrib Apps
 
@@ -324,6 +325,9 @@ AGON_RATINGS_CATEGORY_CHOICES = {
     },
     "documents.Document": {
         "document": "How good is this document?"
+    },
+    "cybergis.CyberGISClient": {
+        "document": "How good is this app?"
     }
 }
 
@@ -335,6 +339,7 @@ ACTSTREAM_SETTINGS = {
         'maps.map',
         'dialogos.comment',
         'documents.document',
+        'cybergis.cybergisclient',
         'services.service'),
     'FETCH_RELATIONS': True,
     'USE_PREFETCH': False,

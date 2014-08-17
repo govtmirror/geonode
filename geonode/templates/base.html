@@ -36,6 +36,9 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
+            <li id="nav_clients">
+              <a href="{% url "client_browse" %}">{% trans "Apps" %}</a>
+            </li>
             <li id="nav_layers">
               <a href="{% url "layer_browse" %}">{% trans "Layers" %}</a>
             </li>

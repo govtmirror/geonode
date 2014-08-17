@@ -62,6 +62,9 @@ urlpatterns = patterns('',
                            TemplateView.as_view(template_name='about.html'),
                            name='about'),
 
+                       # CyberGIS App Views
+                       (r'^cybergis/', include('geonode.contrib.cybergis.urls')),
+
                        # Layer views
                        (r'^layers/', include('geonode.layers.urls')),
 

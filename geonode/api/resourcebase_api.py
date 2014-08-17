@@ -21,6 +21,7 @@ if settings.HAYSTACK_SEARCH:
 from geonode.layers.models import Layer
 from geonode.maps.models import Map
 from geonode.documents.models import Document
+from geonode.contrib.cybergis.models import CyberGISClient
 from geonode.base.models import ResourceBase
 
 from .authorization import GeoNodeAuthorization
@@ -488,3 +489,12 @@ class DocumentResource(CommonModelApi):
     class Meta(CommonMetaApi):
         queryset = Document.objects.distinct().order_by('-date')
         resource_name = 'documents'
+
+class CyberGISClientResource(CommonModelApi):
+
+    """Maps API"""
+
+    class Meta(CommonMetaApi):
+        queryset = CyberGISClient.objects.distinct().order_by('-date')
+        resource_name = 'clients'
+

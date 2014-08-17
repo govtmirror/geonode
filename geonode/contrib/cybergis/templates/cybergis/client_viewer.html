@@ -1,0 +1,69 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="google" content="notranslate" />
+		<meta http-equiv="Content-Language" content="en_US" />
+		<!-- CSS / External-->
+		<link rel="stylesheet" href="/static/cybergis/css/jqueryui/1.8.14/cupertino/jquery-ui-1.8.14.custom.css" type="text/css" media="all" />
+		<link rel="stylesheet" type="text/css" href="/static/cybergis/css/extjs/3.2.1/ext-all.css" />
+		<!-- CSS / CyberGIS Client -->
+		<link rel="stylesheet" href="/static/cybergis/css/cybergis-client/cybergis-client.css" type="text/css" media="all" />
+		<link rel="stylesheet" href="/static/cybergis/css/cybergis-client/cybergis-client-openlayers.css" type="text/css" media="all" />
+		<link rel="stylesheet" href="/static/cybergis/css/cybergis-client/cybergis-client-geoext.css" type="text/css" media="all" />
+		<!-- JavaScript / External -->	
+		<script src="/static/cybergis/js/jquery-1.7.2.js"></script>
+		<script src="/static/cybergis/js/jquery-ui-1.8.14.min.js"></script>
+		<script src="/static/cybergis/js/d3-3.2.0.min.js" charset="utf-8"></script>
+		<script src="/static/cybergis/js/extjs-3.2.1-base.js"></script>
+		<script src="/static/cybergis/js/extjs-3.2.1-all.js"></script>
+		<script src="/static/cybergis/js/cybergis-client/cybergis-client-openlayers-base.min.js"></script>
+		<script src="/static/cybergis/js/osm.js"></script>
+		<script src="/static/cybergis/js/geo-ext-1.0.min.js"></script>
+		<script src="/static/cybergis/js/json2.js"></script>
+		<!-- JavaScript / CyberGIS Client -->		
+		<script src="/static/cybergis/js/cybergis-client/cybergis-client-core.js"></script>
+		<script src="/static/cybergis/js/cybergis-client/cybergis-client-carto.js"></script>
+		<script src="/static/cybergis/js/cybergis-client/cybergis-client-openlayers.js"></script>
+		<script src="/static/cybergis/js/cybergis-client/cybergis-client-geoext.js"></script>
+		<script type="text/javascript" language="Javascript">
+			var now = new Date();
+ 	   		var today = new Date(now.getFullYear(),now.getMonth(),now.getDate());
+			var hiu =
+			{
+				"client": undefined,
+				"urls":
+				{
+					"library":
+					{
+						'proto': '{% url "client_library_proto" %}',
+						'carto': '{% url "client_library_carto" %}'
+					},
+					"app":
+					{
+						"properties": "{% url "client_properties" client.id %}",
+						"proto": "{% url "client_proto" client.id %}",
+						"carto": "{% url "client_carto" client.id %}"
+					}
+				}
+			};
+		</script>
+	</head>
+	<body>
+		<div id="viewer_{{ client.id }}" style="position:absolute;top:0px;left:0px;bottom:0px;right:0px;"
+			data-map-control-zoom="yes"
+			data-map-track="yes"
+			data-map-nav="yes"
+			data-map-select="no"
+                        {% if client.has_bookmarks %}data-map-bookmarks="yes"{% endif %}
+                        {% if client.search_on %}data-map-search="yes"{% endif %}
+		>
+		</div>
+		<script type="text/javascript" language="Javascript">
+			$(function()
+			{
+				hiu.client = new CyberGIS.Client("viewer_{{ client.id }}","OpenLayers",hiu.urls,function(){console.log("Done Loading");},hiu,{});
+				hiu.client.init_begin();
+			});
+		</script>
+	</body>
+</html>

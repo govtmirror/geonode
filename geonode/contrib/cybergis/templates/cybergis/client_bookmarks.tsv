@@ -1,0 +1,3 @@
+name	label	type	latitude	longitude	zoom	layer	field	value
+{% if bookmarks %}{% for bookmark in bookmarks %}{{ bookmark.as_tsv }}
+{% endfor %}{% endif %}

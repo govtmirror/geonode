@@ -1,0 +1,6 @@
+{
+	"name":"{{ layer.name }}",
+	"clasification":"{{ layer.classification }}",
+	"description":"{{ layer.description }}",
+	"type":"{{ layer.type }}"
+}
