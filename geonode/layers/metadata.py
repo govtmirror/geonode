@@ -62,8 +62,9 @@ def set_metadata(xml):
         vals, keywords = dc2dict(exml)
     else:
         raise RuntimeError('Unsupported metadata format')
-    if not vals.get("date"):
-        vals["date"] = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+   
+    if not vals.get("date_revision"):
+        vals["date_revision"] = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
 
     return [vals, keywords]
 
@@ -77,7 +78,7 @@ def iso2dict(exml):
     mdata = MD_Metadata(exml)
     vals['language'] = mdata.language or mdata.languagecode or 'eng'
     vals['spatial_representation_type'] = mdata.hierarchy
-    vals['date'] = sniff_date(mdata.datestamp)
+    #vals['date'] = sniff_date(mdata.datestamp)
 
     if hasattr(mdata, 'identification'):
         vals['title'] = mdata.identification.title
@@ -109,8 +110,24 @@ def iso2dict(exml):
 
         vals['purpose'] = mdata.identification.purpose
 
+        dateTypes = (
+            ('creation','date_creation'),
+            ('publication','date_publication'),
+            ('revision','date_revision'),
+        )
+        dates = mdata.identification.date
+        if dates:
+            for date in dates:
+                for date_code, date_attr in dateTypes:
+                    if date.type == date_code:
+                        vals[date_attr] = sniff_date(date.date)
+                        break
+                         
+
     if mdata.dataquality is not None:
         vals['data_quality_statement'] = mdata.dataquality.lineage
+
+    #vals['date'] = sniff_date(mdata.datestamp)
 
     return [vals, keywords]
 
@@ -203,6 +220,9 @@ def sniff_date(datestr):
     '2000-11-22T'
     """
 
+    if datestr is None:
+        return None
+
     dateformats = ('%Y%m%d', '%Y-%m-%d', '%Y-%m-%dT%H:%M:%SZ',
                    '%Y-%m-%dT', '%Y/%m/%d')
 
@@ -211,6 +231,8 @@ def sniff_date(datestr):
             return datetime.datetime.strptime(datestr.strip(), dfmt)
         except ValueError:
             pass
+
+    return None
 
 
 def get_tagname(element):
