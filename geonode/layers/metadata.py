@@ -66,8 +66,6 @@ def set_metadata(xml):
     if not vals.get("date_revision"):
         vals["date_revision"] = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
 
-    print keywords
-
     return [vals, keywords]
 
 
