@@ -62,9 +62,11 @@ def set_metadata(xml):
         vals, keywords = dc2dict(exml)
     else:
         raise RuntimeError('Unsupported metadata format')
-   
+
     if not vals.get("date_revision"):
         vals["date_revision"] = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+
+    print keywords
 
     return [vals, keywords]
 
@@ -111,9 +113,9 @@ def iso2dict(exml):
         vals['purpose'] = mdata.identification.purpose
 
         dateTypes = (
-            ('creation','date_creation'),
-            ('publication','date_publication'),
-            ('revision','date_revision'),
+            ('creation', 'date_creation'),
+            ('publication', 'date_publication'),
+            ('revision', 'date_revision'),
         )
         dates = mdata.identification.date
         if dates:
@@ -122,12 +124,12 @@ def iso2dict(exml):
                     if date.type == date_code:
                         vals[date_attr] = sniff_date(date.date)
                         break
-                         
+
+    if vals['date_revision'] is None:
+        vals['date_revision'] = sniff_date(mdata.datestamp)
 
     if mdata.dataquality is not None:
         vals['data_quality_statement'] = mdata.dataquality.lineage
-
-    #vals['date'] = sniff_date(mdata.datestamp)
 
     return [vals, keywords]
 
@@ -201,9 +203,24 @@ def dc2dict(exml):
     vals['temporal_extent_start'] = mdata.temporal
     vals['temporal_extent_end'] = mdata.temporal
     vals['constraints_other'] = mdata.license
-    vals['date'] = sniff_date(mdata.modified)
+    #vals['date'] = sniff_date(mdata.modified)
     vals['title'] = mdata.title
     vals['abstract'] = mdata.abstract
+
+    dateTypes = (
+        ('created', 'date_creation'),
+        ('issued', 'date_publication'),
+        ('modified', 'date_revision'),
+    )
+    for date_code, date_attr in dateTypes:
+        if hasattr(mdata, date_code):
+            vals[date_attr] = sniff_date(getattr(mdata, date_code))
+
+    if vals['date_revision'] is None:
+        vals['date_revision'] = sniff_date(mdata.date)
+
+    if keywords:
+        keywords = [keyword for keyword in keywords if keyword]
 
     return [vals, keywords]
 
