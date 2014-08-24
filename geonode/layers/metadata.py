@@ -218,7 +218,7 @@ def dc2dict(exml):
         vals['date_revision'] = sniff_date(mdata.date)
 
     if keywords:
-        keywords = [keyword for keyword in keywords if keyword]
+        keywords = [kw for kw in keywords if kw]
 
     return [vals, keywords]
 
