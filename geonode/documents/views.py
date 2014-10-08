@@ -57,7 +57,7 @@ def document_detail(request, docid):
             loader.render_to_string(
                 '404.html', RequestContext(
                     request, {
-                        })), status=404)
+                        'resource':'document','resource_uc':'Document','resource_lc':'document','resource_pl':'documents','resource_browse':'/documents/'})), status=404)
 
     except PermissionDenied:
         return HttpResponse(

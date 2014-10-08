@@ -2,8 +2,21 @@
 {% load i18n %}
 
 {% block body %}
-  <div id="description"><h3>{% trans "Page Not Found" %}</h3></div>
-  {% blocktrans %}
+  <div id="description">
+    <h3>
+    {% if resource_uc %}
+      {% trans resource_uc %} Not Found
+    {% else %}
+      {% trans "Page Not Found" %}
+    {% endif %}
+    </h3>
+  </div>
+  {% if resource_lc %}
+    The requested {{ resource_lc }} does not exist or was removed.  Perhaps you are using an outdated bookmark?<br><br>
+    If you wish to browse all {{ resource_pl }}, click <a href="{{resource_browse}}">here</a>.
+  {% else %}
+    {% blocktrans %}
       The page you requested does not exist.  Perhaps you are using an outdated bookmark?
-  {% endblocktrans %}
+    {% endblocktrans %}
+  {% endif %}
 {% endblock %}

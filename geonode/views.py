@@ -23,6 +23,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.utils import simplejson as json
 from django.db.models import Q
+from django.template import RequestContext, loader
+
 from geonode.groups.models import GroupProfile
 
 
@@ -99,3 +101,12 @@ def err403(request):
         reverse('account_login') +
         '?next=' +
         request.get_full_path())
+
+
+def err404(request):
+        return HttpResponse(
+            loader.render_to_string(
+                '404.html', RequestContext(
+                    request, {
+                        })), status=404)
+
