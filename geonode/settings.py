@@ -844,3 +844,15 @@ if 'geonode.geoserver' in INSTALLED_APPS:
     baselayers = MAP_BASELAYERS
     MAP_BASELAYERS = [LOCAL_GEOSERVER]
     MAP_BASELAYERS.extend(baselayers)
+
+#Enable Content Security Policy
+#http://www.w3.org/TR/CSP/
+#https://github.com/mozilla/django-csp
+CSP_ENABLED = False
+
+if CSP_ENABLED:
+    MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + \
+        ('csp.middleware.CSPMiddleware',)
+
+    CSP_DEFAULT_SRC = ("'self'",)
+    CSP_IMG_SRC = ("'self'", "www.gravatar.com",)

@@ -1,6 +1,6 @@
 {% load i18n avatar_tags %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-csp>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -18,7 +18,7 @@
       {% endif %}
       <link href="{{ STATIC_URL }}geonode/css/ext-compatibility.css" rel="stylesheet" />
       <link href="{{ STATIC_URL }}geonode/css/base.css" rel="stylesheet" />
-      <style type="text/css">[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}</style>
+      <link href="{{ STATIC_URL }}geonode/css/ngcloak.css" rel="stylesheet" />
       {% block extra_head %}
       {% endblock %}
     {% endblock %}
@@ -65,9 +65,9 @@
             <div class="col-md-3">
               <div class="input-group">
                 {% if HAYSTACK_SEARCH %}
-                <input id="search_input" type="text" placeholder="Search" class="form-control" name="q">
+                <input id="search_input" type="text" placeholder="{% trans 'Type your search here ...' %}" class="form-control" name="q" data-url="{% url "autocomplete_light_autocomplete" "ResourceBaseAutocomplete" %}">
                 {% else %}
-                <input id="search_input" type="text" placeholder="Search" class="form-control" name="title__contains">
+                <input id="search_input" type="text" placeholder="{% trans 'Type your search here ...' %}" class="form-control" name="title__contains" data-url="{% url "autocomplete_light_autocomplete" "ResourceBaseAutocomplete" %}">
                 {% endif %}
                 <span class="input-group-btn">
                   <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
@@ -247,23 +247,7 @@
     {% include 'autocomplete_light/static.html' %}
     <script type="text/javascript" src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
     {% block extra_script %}{% endblock extra_script %}
-    <script type="text/javascript">
-        var autocomplete = $('#search_input').yourlabsAutocomplete({
-            url: '{% url "autocomplete_light_autocomplete" "ResourceBaseAutocomplete" %}',
-            choiceSelector: 'span',
-            hideAfter: 200,
-            minimumCharacters: 1,
-            placeholder: '{% trans 'Type your search here ...' %}',
-            appendAutocomplete: $('#search_input')
-        });
-        $('#search_input').bind('selectChoice', function(e, choice, autocomplete) {
-            if(choice[0].children[0] == undefined) {
-                $('#search_input').val(choice[0].innerHTML);
-                $('#search').submit();
-            }
-        });
-    </script>
+    <script src="{{ STATIC_URL }}geonode/js/base/autocomplete.js"></script>
     <script type="text/javascript" src="{% url "lang" %}"></script>
-
   </body>
 </html>
